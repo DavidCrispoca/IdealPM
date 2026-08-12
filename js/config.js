@@ -15,6 +15,7 @@ IPM.CONFIG = {
   },
   slider: {
     speed: 0.42,
+    randomize: true,
     green: [0.42, 0.58],
     yellow: [0.27, 0.42, 0.58, 0.73]
   },

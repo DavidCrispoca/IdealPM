@@ -144,7 +144,11 @@ Aplica la nueva Dirección de Arte para "IdealPM":
   animación de atajada (dive).
 - **🎯 Arquería:** paisaje campestre, diana frontal con anillos y flecha en
   primer plano.
-- **🏆 Podio:** tres columnas de reflexión con paneles dorados (secciones 8.2).
+- **🏆 Podio:** podio clásico de tres escalones — oro alto al centro (ganador),
+  plata a la izquierda y bronce a la derecha — sobre una base con banda oscura.
+  Cada pedestal es clicable y abre una tarjeta modal con su contenido (cabecera
+  "PASO N DE 3", título y viñetas; se cierra con toque o ESPACIO). Pista de
+  ayuda verde fija bajo el podio, sin parpadeo.
 
 ### 7.4 Pendiente según la guía
 - Partículas avanzadas (polvo/confeti): solo hay chispas simples en el enceste.

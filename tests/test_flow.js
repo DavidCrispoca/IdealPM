@@ -22,6 +22,8 @@ vm.createContext(sandbox);
 vm.runInContext(code, sandbox);
 const IPM = vm.runInContext("IPM", sandbox);
 
+IPM.CONFIG.slider.randomize = false;
+
 const game = {
   stats: { perfects: 0, goods: 0, misses: 0 },
   progress: { completed: {} },

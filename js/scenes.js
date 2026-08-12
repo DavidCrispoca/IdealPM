@@ -472,7 +472,6 @@ function drawBanner(ctx, str, sub, color) {
   const CARD_Y = 210;
   const CARD_W = 210;
   const CARD_H = 104;
-  const TESTBTN = { x: 14, y: 414, w: 120, h: 28 };
 
   class Menu {
     constructor(game) {
@@ -488,10 +487,6 @@ function drawBanner(ctx, str, sub, color) {
     start(idx) {
       this.game.setScene(new IPM.scenes.Minigame(this.game, idx));
     }
-    testPodium() {
-      IPM.audio.click();
-      this.game.setScene(new Podium(this.game));
-    }
     cardAt(evt) {
       if (!evt) return null;
       for (let i = 0; i < 3; i++) {
@@ -501,10 +496,6 @@ function drawBanner(ctx, str, sub, color) {
     }
     handleInput(a, evt) {
       if (a === "tap") {
-        if (evt && evt.x >= TESTBTN.x && evt.x <= TESTBTN.x + TESTBTN.w && evt.y >= TESTBTN.y && evt.y <= TESTBTN.y + TESTBTN.h) {
-          this.testPodium();
-          return;
-        }
         a = this.cardAt(evt);
       }
       if (a === "reset") {
@@ -587,10 +578,6 @@ function drawBanner(ctx, str, sub, color) {
         R.text(ctx, "▶ PRESIONA ESPACIO / TOCA UNA TARJETA PARA JUGAR ◀", W / 2, 424, { size: 13, bold: true, align: "center", color: P.yellow });
       }
       R.text(ctx, "← → SELECCIONAR · ESPACIO JUGAR · R REINICIAR PROGRESO", W / 2, 446, { size: 8, align: "center", color: P.cream });
-
-      R.panel(ctx, TESTBTN.x, TESTBTN.y, TESTBTN.w, TESTBTN.h, { fill: P.panel, light: P.orange });
-      R.rectOutline(ctx, TESTBTN.x, TESTBTN.y, TESTBTN.w, TESTBTN.h, P.orange, 1);
-      R.text(ctx, "TEST PODIO", TESTBTN.x + TESTBTN.w / 2, TESTBTN.y + 18, { size: 10, bold: true, align: "center", color: P.yellow, shadow: false });
     }
   }
 

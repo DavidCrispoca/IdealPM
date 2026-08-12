@@ -22,7 +22,9 @@ servidor estático y se publica en GitHub Pages.
 
 1. **Selecciona un minijuego** en el menú principal.
 2. **Apunta con el slider de timing:** una aguja oscila en bucle. Dispara
-   (ESPACIO / CLICK / TAP) cuando pase por la zona de impacto.
+   (ESPACIO / CLICK / TAP) cuando pase por la zona de impacto. La zona verde y
+   sus franjas amarillas conservan su tamaño pero **cambian de posición en cada
+   intento**, así que el tiro nunca se repite en el mismo lugar.
    - 🟢 **Zona verde** → acierto perfecto.
    - 🟡 **Zona amarilla** → acierto ajustado (bueno).
    - 🔴 **Zona roja** → fallo (se gasta 1 de los 7 intentos).
@@ -34,8 +36,9 @@ servidor estático y se publica en GitHub Pages.
    desbloquea ⚽ Fútbol penaltis; al completar ambos, 🎯 Tiro al blanco. El
    progreso se guarda en `localStorage` (tecla `R` lo reinicia).
 5. **Podio final:** con los 12 aciertos (4 por minijuego) se muestra el perfil completo del PM
-   ideal y las reflexiones estratégicas (imprescindibles, competencias más
-   mencionadas y cómo el contexto prioriza el perfil).
+   ideal en un podio clásico (oro/plata/bronce). **Toca cada pedestal para ver
+   sus tarjetas** (imprescindibles, competencias mencionadas y cómo el contexto
+   prioriza el perfil); se cierran con toque o ESPACIO.
 
 ### Los 3 minijuegos
 | Minijuego | Escenario | Contenido que desbloquea |
@@ -79,7 +82,7 @@ Reglas del formato:
 | Sprites | SVG embebidos (data-URI) rasterizados y ampliados sin suavizado, con fallback procedural |
 | Audio | Web Audio API (sintetizado; requiere primer gesto del usuario) |
 | Estilos | CSS3, tema retro 8-bit, responsive táctil |
-| Persistencia | `localStorage` (clave `idealpm_progress_v1`) |
+| Persistencia | `localStorage` (clave `idealpm_progress_v2`) |
 | Pruebas | Node.js — suites en `tests/` (`node tests/test_*.js`) |
 | Despliegue | Servidor estático / GitHub Pages |
 
@@ -134,23 +137,46 @@ node tests/test_sprites.js    # Rasterización de sprites
 
 ## 🌐 Despliegue en GitHub Pages
 
-1. Publica el repo en GitHub.
-2. Ve a **Settings → Pages**.
-3. Origen: `main` / raíz.
-4. El juego quedará en `https://<usuario>.github.io/IdealPM/`.
+El repo ya existe en GitHub (`https://github.com/DavidCrispoca/IdealPM`, rama `main`).
+Para publicar la versión jugable:
+
+```bash
+# 1. Confirma que estás en la rama main y revisa lo que está sin commitear
+git status
+
+# 2. Sube todos los cambios pendientes
+git add .
+git commit -m "IdealPM: versión jugable (3 minijuegos, bloqueos, podio interactivo)"
+git push origin main
+```
+
+Luego, en GitHub (desde el navegador):
+
+3. Abre el repo → **Settings → Pages**.
+4. En **Build and deployment → Source** elige **Deploy from a branch**.
+5. Branch: `main` · Carpeta: **`/ (root)`** → **Save**.
+6. En 1–3 minutos quedará publicado en:
+
+   **`https://DavidCrispoca.github.io/IdealPM/`**
+
    (Todo usa rutas relativas, así que funciona bajo subcarpeta.)
+
+> Si quieres la URL raíz `https://DavidCrispoca.github.io/`, el repo debe
+> llamarse `DavidCrispoca.github.io`; para una URL con `/IdealPM/` el nombre
+> actual es correcto.
 
 ## 🎮 Controles
 
 - **ESPACIO / CLICK / TAP:** disparar, avanzar diálogos y navegar el menú.
 - **← / → (o tocar a los lados):** cambiar de minijuego en el menú.
+- **Tocar un pedestal del podio:** ver su contenido (se cierra con toque/ESPACIO).
 - **R:** reiniciar el progreso guardado.
 
 ## 🔧 Notas de desarrollo
 
-- **Desbloqueos en prueba:** mientras se validaban los 3 minijuegos, `main.js`
-  (`isUnlocked`) quedó con los 3 minijuegos desbloqueados temporalmente. Para
-  volver al bloqueo secuencial del jugador, restaurar esa función.
+- **Bloqueo secuencial activo:** football requiere basketball completado; tiro al
+  blanco requiere ambos. El progreso de testing quedó invalidado cambiando la
+  clave de `localStorage` a `idealpm_progress_v2`.
 - **Audio:** el navegador exige un primer gesto del usuario para sonar.
 - **Fuentes:** todas escaladas por `IPM.CONFIG.fontScale` (1.32) para legibilidad.
 

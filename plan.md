@@ -6,11 +6,13 @@ dependencias) desplegable en GitHub Pages como `https://<usuario>.github.io/Idea
 
 ## Alcance
 - 3 minijuegos: 🏀 Basketball, ⚽ Fútbol (penaltis), 🎯 Tiro al blanco.
-- Por minijuego: 7 intentos, 4 aciertos para completar. Slider de timing (zona verde/amarilla/roja).
+- Por minijuego: 7 intentos, 4 aciertos para completar. Slider de timing (zona
+  verde/amarilla/roja) cuyas zonas cambian de posición en cada intento.
 - Control: ESPACIO / CLICK / TAP. HUD con "INTENTOS X/7" y "Tiro X de 7".
 - Tarjetas de diálogo por acierto desbloqueado, con efecto de escritura y
   contenido extraído del documento `aciertos.md` del autor (respaldo en config.js).
-- Podio final con perfil completo y las 3 reflexiones estratégicas.
+- Podio final interactivo (pedestales oro/plata/bronce clicables) con perfil
+  completo y las 3 reflexiones estratégicas.
 - Pixel-art procedural en Canvas + sprites SVG embebidos (sin spritesheets externos).
 - Sonido sintetizado con Web Audio API (requiere primer gesto del usuario).
 
@@ -43,7 +45,8 @@ IdealPM/
        los 3 minijuegos + textos del podio (spec §4, §5).
 4. [x] `js/audio.js`: sintetizador (beep perfecto, buen tiro, fallo, fanfarria).
 5. [x] `js/slider.js`: núcleo de timing — aguja oscilante, zonas
-       verde/amarilla/roja, evento de tiro (7 intentos; 4 aciertos completan el nivel).
+       verde/amarilla/roja (que cambian de posición en cada intento), evento de
+       tiro (7 intentos; 4 aciertos completan el nivel).
 6. [x] `js/render.js`: utilidades pixel-art (escalado, paleta, rects, textos,
        `wrap` por palabras).
 7. [x] `js/main.js`: bucle de juego (requestAnimationFrame), input teclado/
@@ -54,7 +57,8 @@ IdealPM/
 10. [x] Escena Tiro al blanco: diana frontal, flecha, animación centro/madera,
         tarjeta.
 11. [x] HUD unificado: ❤️ x10, "Tiro X de 7" con 🏀/⚽/🎯, contador de aciertos.
-12. [x] Escena Podio: perfil completo + 3 reflexiones estratégicas (spec §5).
+12. [x] Escena Podio: podio clásico oro/plata/bronce con pedestales clicables que
+         abren tarjetas (perfil completo + 3 reflexiones estratégicas, spec §5).
 13. [x] Pantalla de game over/retry por minijuego (7 intentos sin 4 aciertos) y reinicio.
 14. [x] Verificación local: servidor activo en http://localhost:8000 — pruebas
         funcionales y de render automáticas aprobadas; validación visual pendiente
@@ -63,14 +67,14 @@ IdealPM/
         (títulos + categoría en la viñeta, descripción en blockquote) y carga
         dinámica en el boot; respaldo a logros de config.js para tiros sin entrada.
 16. [x] Tarjeta de logro como diálogo con efecto de escritura que solo se cierra
-        con Click/Espacio, y autoajuste de texto/ventana (título envuelto en 2
-        líneas, descripción que reduce fuente de 9→6 si excede 4 líneas, ventana
-        de 180→320 px).
+        con Click/Espacio, y autoajuste de texto/ventana (título 24→19px envuelto
+        en máx. 2 líneas; descripción que reduce su fuente de 15→8px hasta caber
+        y recorta líneas solo como último recurso).
 17. [x] Pruebas automáticas en `tests/` (5 suites, ver abajo).
-18. [ ] `git init` local en `IdealPM/` + `.gitignore` (opcional) y primera
-        revisión de archivos. (Commits y repo GitHub: los hace el usuario.)
-19. [ ] Entrega: instrucciones de despliegue para GitHub Pages (repo público,
-        Settings→Pages→main/raíz). URL final: `https://<usuario>.github.io/IdealPM/`.
+18. [x] `git init` local + repo remoto `https://github.com/DavidCrispoca/IdealPM.git`
+        (rama `main`) creado y sincronizado con `origin/main`.
+19. [ ] Despliegue en GitHub Pages (repo público, Settings→Pages→main/raíz).
+        URL final: `https://DavidCrispoca.github.io/IdealPM/`.
 
 ## Decisiones tomadas
 - Contenido de tarjetas en `aciertos.md`: el juego lee el documento del autor con
@@ -87,13 +91,12 @@ IdealPM/
 - 7 intentos por minijuego: cada tiro consume un intento. Con 4 aciertos se
   completa el nivel y se desbloquea el siguiente; si tras los 7 intentos no hay
   4 aciertos, se repite el minijuego.
-- **Desbloqueo secuencial:** solo se juega basketball al inicio; football se
-  desbloquea al completar basketball, y archery al completar los dos anteriores.
-  Las tarjetas bloqueadas se muestran en gris con candado. Progreso guardado en
-  `localStorage` (tecla `R` lo reinicia).
-  **Nota de desarrollo:** mientras se testeaban los 3 minijuegos se desbloquearon
-  temporalmente (en `main.js`, `isUnlocked` devuelve true para los índices 0–2).
-  Al terminar el testing, revertir esa función al bloqueo secuencial original.
+- **Desbloqueo secuencial activo:** solo se juega basketball al inicio; football
+  se desbloquea al completar basketball, y archery al completar los dos
+  anteriores. Las tarjetas bloqueadas se muestran en gris con candado y tocar
+  una muestra el mensaje de bloqueo. Progreso guardado en `localStorage` con la
+  clave `idealpm_progress_v2` (tecla `R` lo reinicia). La clave v1 quedó
+  invalidada para no arrastrar el progreso de la fase de testing.
 - **Tipografía más legible:** escala global de fuente (`fontScale: 1.32` en
   `config.js`) y más espacio vertical en HUD, tarjetas, menú y podio.
 - **Cancha de basketball estilo retro (vista lateral):** cámara de costado como
@@ -115,11 +118,32 @@ IdealPM/
   desaparece con Click o Espacio** (el primer input completa la escritura, el
   segundo avanza al siguiente diálogo o cierra la tarjeta). El contenido sale de
   `aciertos.md` y la tarjeta se asigna al disparar (`shoot()`).
-- **Tarjeta autoajustable:** el título se envuelve hasta 2 líneas (baja a 19px
-  si hace falta) y la descripción se envuelve al ancho de la ventana; si ocupa
-  más de 4 líneas la fuente baja de 9→8→7→6px hasta caber. La altura de la
-  ventana crece con el contenido (180→320px) y se ancla arriba para no salirse
-  de pantalla. El caret de escritura se escala con el tamaño de fuente.
+- **Tarjeta autoajustable:** tarjeta de 560px de ancho; el título usa 24px y baja
+  a 19 si envuelve a más de 2 líneas (límite duro de 2); la descripción se
+  envuelve al ancho útil (ancho − 128px) y reduce su fuente de 15→8px hasta
+  caber en la ventana (máx. 380px), recortando líneas solo como último recurso.
+  La ventana crece con el contenido y se ancla arriba para no salirse de la
+  pantalla. El pie muestra "TIRO N DE 7". El caret de escritura se escala con el
+  tamaño de fuente. `R.wrap` parte las palabras más largas que el ancho máximo.
+- **Zonas del slider aleatorias por intento:** las zonas verde y amarilla
+  conservan su tamaño (verde 0.16, amarilla 0.15 a cada lado) pero cambian de
+  posición en el slider en cada intento (`IPM.CONFIG.slider.randomize: true`,
+  centro verde aleatorio entre 0.15 y 0.69). Así la aguja nunca cruza la misma
+  zona en el mismo lugar. Los tests fijan `randomize: false` para mantener el
+  comportamiento determinista.
+- **Podio interactivo (rediseño):** podio clásico de tres escalones — oro alto
+  al centro (1. Imprescindibles, ganador), plata a la izquierda (2. Competencias
+  mencionadas) y bronce a la derecha (3. Reflexión) — sobre una base con banda
+  oscura. Cada pedestal es clicable (hit-test por rectángulo) y abre una tarjeta
+  modal con cabecera "PASO N DE 3", título y viñetas; se cierra con toque o
+  ESPACIO. ESPACIO sin tocar o un toque fuera del podio devuelve al menú. Pista
+  verde de ayuda siempre visible (sin parpadeo). Los textos del podio usan
+  `shadow: false` para evitar sombras duplicadas.
+- **Página principal (menú):** título animado con wobble, subtítulo
+  "¡Conviértete en el Project Manager Ideal!", dos líneas de instrucciones,
+  tarjetas de los 3 niveles (bloqueadas en gris con 🔒, completadas con ✓),
+  pista parpadeante y barra de teclas "← → SELECCIONAR · ESPACIO JUGAR ·
+  R REINICIAR PROGRESO".
 - **Pruebas automáticas en `tests/` (node tests/test_*.js):**
   - `test_boot.js`: boot + input + máquina de estados.
   - `test_flow.js`: flujo completo (4 aciertos completan; 7 intentos sin 4 aciertos -> gameover; tarjeta

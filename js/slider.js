@@ -14,10 +14,26 @@ IPM.Slider = class {
     this.dir = 1;
     this.active = false;
     this.fired = false;
+    const cfg = IPM.CONFIG.slider;
+    this.green = cfg.green.slice();
+    this.yellow = cfg.yellow.slice();
+  }
+
+  randomize() {
+    const cfg = IPM.CONFIG.slider;
+    if (!cfg.randomize) return;
+    const gw = cfg.green[1] - cfg.green[0];
+    const yw = cfg.green[0] - cfg.yellow[0];
+    const min = yw;
+    const max = 1 - yw - gw;
+    const g = min + Math.random() * (max - min);
+    this.green = [g, g + gw];
+    this.yellow = [g - yw, g, g + gw, g + gw + yw];
   }
 
   start() {
     this.reset();
+    this.randomize();
     this.active = true;
   }
 
@@ -34,9 +50,8 @@ IPM.Slider = class {
 
   getZone() {
     const n = this.needle;
-    const cfg = IPM.CONFIG.slider;
-    const g0 = cfg.green[0], g1 = cfg.green[1];
-    const y0 = cfg.yellow[0], y1 = cfg.yellow[1], y2 = cfg.yellow[2], y3 = cfg.yellow[3];
+    const g0 = this.green[0], g1 = this.green[1];
+    const y0 = this.yellow[0], y1 = this.yellow[1], y2 = this.yellow[2], y3 = this.yellow[3];
     if (n >= g0 && n <= g1) return "perfect";
     if ((n >= y0 && n < g0) || (n > g1 && n <= y1)) return "good";
     if (n >= y2 && n <= y3) return "good";
@@ -53,10 +68,9 @@ IPM.Slider = class {
   render(ctx, opts) {
     opts = opts || {};
     const P = IPM.render.PALETTE;
-    const cfg = IPM.CONFIG.slider;
     const x = this.barX, y = this.barY, w = this.barW, h = this.barH;
-    const g0 = cfg.green[0], g1 = cfg.green[1];
-    const y0 = cfg.yellow[0], y1 = cfg.yellow[1], y2 = cfg.yellow[2], y3 = cfg.yellow[3];
+    const g0 = this.green[0], g1 = this.green[1];
+    const y0 = this.yellow[0], y1 = this.yellow[1], y2 = this.yellow[2], y3 = this.yellow[3];
 
     IPM.render.rect(ctx, x, y, w, h, P.redDark);
     IPM.render.rect(ctx, x + y0 * w, y, (g0 - y0) * w, h, P.yellow);

@@ -10,14 +10,16 @@ IPM.game = (function () {
   const game = {
     stats: { perfects: 0, goods: 0, misses: 0 },
     progress: { completed: {} },
-    PROGRESS_KEY: "idealpm_progress_v1",
+    PROGRESS_KEY: "idealpm_progress_v2",
     setScene: function (scene) {
       current = scene;
       if (scene.enter) scene.enter();
     },
     get scene() { return current; },
     isUnlocked: function (mgIndex) {
-      if (mgIndex >= 0 && mgIndex <= 2) return true;
+      if (mgIndex === 0) return true;
+      if (mgIndex === 1) return !!this.progress.completed.basketball;
+      if (mgIndex === 2) return !!this.progress.completed.basketball && !!this.progress.completed.football;
       return false;
     },
     completeMinigame: function (id) {

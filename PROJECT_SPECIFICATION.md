@@ -38,6 +38,10 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
    - **Zona Amarilla (Good):** Acierto ajustado + Desbloqueo del ítem.
    - **Zona Roja (Miss / Fail):** Tiro fallido (Animación de fallo, -1 Vida).
 3. **Control Unificado:** Un solo botón / toque en pantalla (Tecla `ESPACIO` o `CLICK / TAP`).
+4. **Variación por intento:** las zonas verde y amarilla conservan su tamaño
+   (verde 0.16, amarilla 0.15 a cada lado) pero **cambian de posición** en el
+   slider en cada intento (`IPM.CONFIG.slider.randomize: true`). La aguja nunca
+   cruza la zona de impacto en el mismo lugar dos veces.
 
 ---
 
@@ -102,7 +106,7 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
 
 ## 5. SECCIÓN FINAL: PODIO Y REFLEXIÓN ESTRATÉGICA
 
-Al completar con éxito los 4 aciertos de cada uno de los 3 minijuegos, se accede al Podio Final donde se estructuran los 3 puntos de reflexión requeridos para la charla de Recursos Humanos:
+Al completar con éxito los 4 aciertos de cada uno de los 3 minijuegos, se accede al Podio Final donde se estructuran los 3 puntos de reflexión requeridos para la charla de Recursos Humanos. El podio es **interactivo**: cada pedestal (oro/plata/bronce) se toca para abrir una tarjeta con su contenido y se cierra con toque o ESPACIO.
 
 ### **1. Características Imprescindibles y Justificación**
 - **Comunicación Asertiva:** Puente indispensable entre desarrolladores, clientes y directivos. Si falla la comunicación, el proyecto fracasa sin importar la tecnología utilizada [cite: 1].
@@ -191,8 +195,11 @@ Al completar con éxito los 4 aciertos de cada uno de los 3 minijuegos, se acced
 ### 8.2 Funcionalidades agregadas durante el desarrollo
 - **Carga dinámica de `aciertos.md` (`js/aciertos.js`):** el documento real del autor es la fuente de contenido. Se parsea por sección `##` + emoji, acierto `### Cesta/Disparo/Diana N` y diálogos `- **Título:**` con descripción en blockquote `> *"..."*`. La categoría de la tarjeta se deriva automáticamente según el minijuego y el orden del diálogo. Los tiros 5–7 (sin entrada en el doc) usan como respaldo los logros de `config.js`.
 - **Tarjetas de logro como diálogos:** tras cada acierto se muestra una tarjeta retro con avatar del minijuego, texto que se **escribe carácter a carácter** y que **solo se cierra con Click/Espacio** (el primer input completa la escritura; el segundo avanza al siguiente diálogo o cierra). Basketball y football muestran 2 diálogos consecutivos por acierto; archery, 1.
-- **Autoajuste de texto/ventana en tarjetas:** tarjeta amplia (560×230–400 px), el título usa 24 px (baja a 19 si envuelve a 2 líneas), la descripción usa 15 px (reduce hasta 11 si excede 5 líneas) y la ventana crece según el contenido, anclada para no salir de pantalla.
-- **Desbloqueo secuencial con progreso persistente:** basketball al inicio; football al completar basketball; archery al completar los dos. Las tarjetas bloqueadas se ven en gris con candado. Progreso en `localStorage` (tecla `R` reinicia). *Nota: durante el testing los 3 minijuegos están temporalmente desbloqueados en `main.js` (`isUnlocked`); revertir al terminar.*
+- **Autoajuste de texto/ventana en tarjetas:** tarjeta amplia (560×230–380 px), el título usa 24 px (baja a 19 si envuelve a 2 líneas, tope de 2), la descripción se envuelve al ancho útil (ancho − 128 px) y reduce su fuente de 15→8 px hasta caber, con recorte de líneas solo como último recurso. La ventana crece según el contenido y se ancla para no salir de pantalla. `R.wrap` parte las palabras que exceden el ancho máximo.
+- **Desbloqueo secuencial activo con progreso persistente:** basketball al inicio; football al completar basketball; archery al completar los dos. Las tarjetas bloqueadas se ven en gris con candado y tocar una muestra el mensaje de bloqueo. Progreso en `localStorage` con clave `idealpm_progress_v2` (tecla `R` reinicia; la v1 quedó invalidada para no arrastrar progreso de testing).
+- **Slider con zonas aleatorias por intento:** las zonas verde y amarilla conservan su tamaño pero cambian de posición en cada intento (centro verde aleatorio entre 0.15 y 0.69) mediante `IPM.CONFIG.slider.randomize: true`. `getZone()` y el render del slider usan las zonas de la instancia, no valores fijos.
+- **Podio interactivo (rediseño):** podio clásico oro/plata/bronce sobre base; cada pedestal es clicable (hit-test por rectángulo) y abre una tarjeta modal con cabecera "PASO N DE 3", título y viñetas. Se cierra con toque o ESPACIO; ESPACIO sin tocar o un toque fuera del podio devuelve al menú. Pista verde siempre visible.
+- **Menú principal actualizado:** título animado con wobble, subtítulo "¡Conviértete en el Project Manager Ideal!", dos líneas de instrucciones, tarjetas de niveles bloqueados en gris con candado y completados con ✓, pista parpadeante y barra de teclas.
 - **Sistema de sprites (`js/sprites.js`):** sprites pixel-art como SVG embebidos (data-URI) rasterizados y ampliados sin suavizado → acabado retro nítido, con fallback procedural por escena (`spriteOr()`). 8 sprites: jugador baloncesto, tablero/aro/red, balón, arquero, balón de fútbol, diana, flecha y balón de baloncesto.
 - **Cancha de basketball (vista lateral):** jugador grande (×2.6) a la izquierda, aro grande (×2.6) a la derecha, parquet con marcas pintadas (línea de fondo y **un solo círculo central**), grada con público, poste con base y sombras en el suelo.
 - **Pruebas automáticas (`tests/`):** 5 suites ejecutables con `node tests/test_*.js` (boot/input, flujo, render con y sin sprites, parseo de `aciertos.md`, sprites).
