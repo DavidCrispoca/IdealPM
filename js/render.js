@@ -90,22 +90,29 @@ IPM.render = (function () {
   }
 
   function wrap(ctx, str, maxW, size) {
-    const words = str.split(" ");
+    const words = String(str).split(" ");
     const lines = [];
     let cur = "";
     const scale = IPM.CONFIG.fontScale || 1;
     const fsize = Math.round((size || 10) * scale);
     ctx.font = fsize + "px 'Courier New', monospace";
-    for (const w of words) {
-      const test = cur ? cur + " " + w : w;
-      if (ctx.measureText(test).width > maxW && cur) {
-        lines.push(cur);
-        cur = w;
-      } else {
-        cur = test;
+    const flush = function () { if (cur) lines.push(cur); cur = ""; };
+    for (let w of words) {
+      while (w.length && ctx.measureText(w).width > maxW) {
+        let cut = 1;
+        while (cut < w.length && ctx.measureText(w.slice(0, cut)).width <= maxW) cut++;
+        let head = w.slice(0, cut - 1);
+        w = w.slice(cut - 1);
+        flush();
+        if (!head) { head = w.slice(0, 1); w = w.slice(1); }
+        lines.push(head);
       }
+      if (!w) continue;
+      const test = cur ? cur + " " + w : w;
+      if (ctx.measureText(test).width > maxW && cur) { flush(); }
+      cur = cur ? cur + " " + w : w;
     }
-    if (cur) lines.push(cur);
+    flush();
     return lines;
   }
 

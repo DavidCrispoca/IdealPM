@@ -31,7 +31,7 @@ IPM.CONFIG = {
 IPM.MINIGAMES = [
   {
     id: "basketball",
-    name: "Basketball IdealPM",
+    name: "Basketball",
     emoji: "🏀",
     intro: "HABILIDADES TÉCNICAS Y BLANDAS",
     shots: 7,
@@ -48,7 +48,7 @@ IPM.MINIGAMES = [
   },
   {
     id: "football",
-    name: "Fútbol Penaltis IdealPM",
+    name: "Fútbol Penaltis",
     emoji: "⚽",
     intro: "COMPETENCIAS CLAVE Y ATRIBUTOS",
     shots: 7,
@@ -65,7 +65,7 @@ IPM.MINIGAMES = [
   },
   {
     id: "archery",
-    name: "Tiro al Blanco IdealPM",
+    name: "Tiro al Blanco",
     emoji: "🎯",
     intro: "CERTIFICACIONES",
     shots: 7,

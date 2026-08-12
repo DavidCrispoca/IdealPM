@@ -44,14 +44,14 @@ IPM.scenes = (function () {
     const cx = W / 2;
     const cw = 560;
 
-    const maxW = cw - 96;
+    const maxW = cw - 128;
     let dSize = 15;
     let dLines = R.wrap(ctx, ach.desc, maxW, dSize);
-    while (dLines.length > 5 && dSize > 11) {
+    while (dLines.length > 5 && dSize > 10) {
       dSize--;
       dLines = R.wrap(ctx, ach.desc, maxW, dSize);
     }
-    const dH = Math.max(20, Math.round(dSize * 1.55));
+    let dH = Math.max(20, Math.round(dSize * 1.55));
 
     let tSize = 24;
     let tLines = R.wrap(ctx, ach.title, cw - 40, tSize);
@@ -60,9 +60,19 @@ IPM.scenes = (function () {
 
     const headerH = 34;
     const pad = 18;
-    const bodyH = 58 + tLines.length * 28 + dLines.length * dH;
     const footerH = 24;
-    const ch = Math.min(400, Math.max(230, headerH + bodyH + footerH + pad));
+    const maxCh = 380;
+    const maxDescH = maxCh - headerH - footerH - pad - 64 - tLines.length * 28;
+    while (dSize > 8 && dLines.length * dH > maxDescH) {
+      dSize--;
+      dH = Math.max(20, Math.round(dSize * 1.55));
+      dLines = R.wrap(ctx, ach.desc, maxW, dSize);
+    }
+    if (dLines.length * dH > maxDescH) {
+      dLines = dLines.slice(0, Math.floor(maxDescH / dH));
+    }
+    const bodyH = 58 + tLines.length * 28 + dLines.length * dH;
+    const ch = Math.min(maxCh, Math.max(230, headerH + bodyH + footerH + pad));
 
     const x = cx - cw / 2;
     let y = 225 - ch / 2 + rise;
@@ -527,8 +537,9 @@ function drawBanner(ctx, str, sub, color) {
       R.text(ctx, "IDEALPM", W / 2, 118 + wob, { size: 46, bold: true, align: "center", color: P.red });
       R.text(ctx, "IDEALPM", W / 2 + 4, 122 + wob, { size: 46, bold: true, align: "center", color: P.yellow });
       R.text(ctx, "IDEALPM", W / 2, 120 + wob, { size: 46, bold: true, align: "center", color: P.white });
-      R.text(ctx, "EL PERFIL DEL PROJECT MANAGER IDEAL", W / 2, 154, { size: 11, align: "center", color: P.blue });
-      R.text(ctx, "4 ACIERTOS EN 7 INTENTOS PARA COMPLETAR Y DESBLOQUEAR EL SIGUIENTE", W / 2, 170, { size: 8, align: "center", color: P.cream });
+      R.text(ctx, "¡Conviértete en el Project Manager Ideal!", W / 2, 154, { size: 11, align: "center", color: P.blue });
+      R.text(ctx, "Desbloquea el siguiente nivel en 7 intentos.", W / 2, 170, { size: 8, align: "center", color: P.cream });
+      R.text(ctx, "Por cada acierto, aprenderás nuevas características", W / 2, 181, { size: 8, align: "center", color: P.cream });
 
       const sel = this.unlocked();
       const selIdx = sel.length ? sel[this.opt % sel.length] : 0;
@@ -562,7 +573,7 @@ function drawBanner(ctx, str, sub, color) {
 
       const blink = Math.floor(this.time * 2.2) % 2 === 0;
       if (blink) {
-        R.text(ctx, "▶ PRESIONA ESPACIO / TOCA UNA CARD PARA JUGAR ◀", W / 2, 424, { size: 13, bold: true, align: "center", color: P.yellow });
+        R.text(ctx, "▶ PRESIONA ESPACIO / TOCA UNA TARJETA PARA JUGAR ◀", W / 2, 424, { size: 13, bold: true, align: "center", color: P.yellow });
       }
       R.text(ctx, "← → SELECCIONAR · ESPACIO JUGAR · R REINICIAR PROGRESO", W / 2, 446, { size: 8, align: "center", color: P.cream });
     }
@@ -767,10 +778,10 @@ function drawBanner(ctx, str, sub, color) {
         const typed = clamp(this.cardT / this.cardDur, 0, 1);
         drawCard(ctx, this, Math.min(0.6, this.cardT), typed);
         if (this.cardQueue.length > 1) {
-          R.text(ctx, "DIÁLOGO " + (this.cardIdx + 1) + " DE " + this.cardQueue.length, W / 2, 436, { size: 12, bold: true, align: "center", color: P.blue });
+          R.text(ctx, "DIÁLOGO " + (this.cardIdx + 1) + " DE " + this.cardQueue.length, W / 2, 424, { size: 12, bold: true, align: "center", color: P.blue });
         }
         if (typed >= 1 && Math.floor(this.time * 3) % 2 === 0) {
-          R.text(ctx, "▶ PRESIONA ESPACIO / TOCA PARA CONTINUAR ◀", W / 2, 250, { size: 11, bold: true, align: "center", color: P.green });
+          R.text(ctx, "▶ PRESIONA ESPACIO / TOCA PARA CONTINUAR ◀", W / 2, 438, { size: 12, bold: true, align: "center", color: P.green });
         }
       } else if (this.state === "clear") {
         drawBanner(ctx, "¡NIVEL SUPERADO!", "Aciertos " + this.successes + "/" + this.mg.needed + " · ¡Pasa al siguiente minijuego!", P.yellow);

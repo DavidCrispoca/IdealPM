@@ -89,7 +89,7 @@ IdealPM/
   4 aciertos, se repite el minijuego.
 - **Desbloqueo secuencial:** solo se juega basketball al inicio; football se
   desbloquea al completar basketball, y archery al completar los dos anteriores.
-  Las cards bloqueadas se muestran en gris con candado. Progreso guardado en
+  Las tarjetas bloqueadas se muestran en gris con candado. Progreso guardado en
   `localStorage` (tecla `R` lo reinicia).
   **Nota de desarrollo:** mientras se testeaban los 3 minijuegos se desbloquearon
   temporalmente (en `main.js`, `isUnlocked` devuelve true para los índices 0–2).
@@ -111,7 +111,7 @@ IdealPM/
   jugador y arquero.
 - **Tarjeta de logro como diálogo:** tras encestar, la animación de vuelo va en
   timeline fijo de 1 s y luego se entra al estado `card`: diálogo con avatar del
-  minijuego, texto que **se escribe caracter a caracter**, y que **solo
+  minijuego, texto que **se escribe carácter a carácter**, y que **solo
   desaparece con Click o Espacio** (el primer input completa la escritura, el
   segundo avanza al siguiente diálogo o cierra la tarjeta). El contenido sale de
   `aciertos.md` y la tarjeta se asigna al disparar (`shoot()`).

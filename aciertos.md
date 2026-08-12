@@ -20,8 +20,8 @@ Este documento contiene la estructura de diálogos y contenido que se despliega 
   > *"Tanto técnica como gerencial."*
 
 ### 🏀 Cesta 3
-- **Manejo de metodologías :**  
-  > *"Metodología Agiles como Scrum/Kanban y predictivas como Waterfall."*
+- **Manejo de metodologías:**  
+  > *"Metodologías Ágiles como Scrum/Kanban y predictivas como Waterfall."*
 - **Empatía e inteligencia emocional para resolver conflictos:**  
   > *"Comprender las emociones del equipo y mediar conflictos de forma constructiva."*
 
@@ -34,7 +34,7 @@ Este documento contiene la estructura de diálogos y contenido que se despliega 
 ---
 
 ## ⚽ SEGUNDO NIVEL: FÚTBOL PENALTIS
-* **Estructura:** Cada gol anotado desbloquea dos diálogos consecutivos (Competencias Claves y Certificaciones Recomendadas).
+* **Estructura:** Cada gol anotado desbloquea dos diálogos consecutivos (Competencias Clave y Certificaciones Recomendadas).
 
 ### ⚽ Disparo 1
 - **Gestión y optimización del tiempo:**  
@@ -55,7 +55,7 @@ Este documento contiene la estructura de diálogos y contenido que se despliega 
   > *"Certificación de entrada que valida conocimientos fundamentales en dirección de proyectos."*
 
 ### ⚽ Disparo 4
-- **Capacidad de análisis de datos e indicadores (KPIs) :**  
+- **Capacidad de análisis de datos e indicadores (KPIs):**  
   > *"Interpretación de métricas para evaluar el desempeño y avance del proyecto."*
 - **PMI Agile Certified Practitioner (PMI-ACP) para metodologías ágiles avanzadas:**  
   > *"Certificación que valida el dominio de múltiples enfoques ágiles."*
