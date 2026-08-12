@@ -40,9 +40,10 @@ IPM.aciertos = (function () {
         out[mg].push(entry);
         dialog = null;
       } else if (entry) {
-        if (/^-\s*\*\*Di[áa]logo/.test(line)) {
+        var mBullet = line.match(/^-\s*\*\*(.+?)\*\*\s*:?\s*$/);
+        if (mBullet) {
           dialog = {};
-          var rest = line.replace(/^-\s*\*\*/, "").replace(/\*\*:\s*$/, "").trim();
+          var rest = mBullet[1].trim();
           var paren = rest.match(/\((.*)\)/);
           dialog.title = rest;
           dialog.type = paren ? paren[1].toUpperCase() : "ACCIÓN";

@@ -49,44 +49,75 @@ IPM.scenes = (function () {
     if (!ach) return;
     const inT = clamp(t / 0.35, 0, 1);
     const rise = (1 - inT) * 16;
-    const cx = W / 2, cy = 120;
-    const cw = 440, ch = 180;
-    const x = cx - cw / 2, y = cy - ch / 2 + rise;
+    const cx = W / 2;
+    const cw = 440;
+
+    const maxW = cw - 92;
+    let dSize = 9;
+    let dLines = R.wrap(ctx, ach.desc, maxW, dSize);
+    while (dLines.length > 4 && dSize > 6) {
+      dSize--;
+      dLines = R.wrap(ctx, ach.desc, maxW, dSize);
+    }
+    const dH = Math.max(13, Math.round(dSize * 1.6));
+
+    let tSize = 15;
+    let tLines = R.wrap(ctx, ach.title, cw - 40, tSize);
+    if (tLines.length > 2) { tSize = 13; tLines = R.wrap(ctx, ach.title, cw - 40, tSize); }
+    if (tLines.length > 2) tLines = tLines.slice(0, 2);
+
+    const headerH = 26;
+    const pad = 16;
+    const bodyH = 44 + tLines.length * 18 + dLines.length * dH;
+    const footerH = 20;
+    const ch = Math.min(320, Math.max(180, headerH + bodyH + footerH + pad));
+
+    const x = cx - cw / 2;
+    let y = 120 - ch / 2 + rise;
+    if (y < 8) y = 8;
 
     R.rect(ctx, 0, 0, W, H, "rgba(13,14,26,0.5)");
     R.panel(ctx, x, y, cw, ch, { fill: P.panel, light: P.yellow });
-    R.rect(ctx, x, y, cw, 26, P.black);
+    R.rect(ctx, x, y, cw, headerH, P.black);
     R.text(ctx, "★ ¡ACCIÓN DESBLOQUEADA!", x + cw / 2, y + 18, { size: 12, bold: true, align: "center", color: P.yellow });
 
-    R.text(ctx, "[" + ach.type + "]", x + cw / 2, y + 52, { size: 9, align: "center", color: P.orange });
-    R.text(ctx, ach.title, x + cw / 2, y + 80, { size: 17, bold: true, align: "center", color: P.white });
+    let curY = y + headerH + 20;
+    R.text(ctx, "[" + ach.type + "]", x + cw / 2, curY, { size: 9, align: "center", color: P.orange });
+    curY += 20;
+    for (let i = 0; i < tLines.length; i++) {
+      R.text(ctx, tLines[i], x + cw / 2, curY, { size: tSize, bold: true, align: "center", color: P.white });
+      curY += 18;
+    }
+    curY += 12;
 
-    R.circle(ctx, x + 46, y + 118, 20, "#1c1e33");
-    R.circleOutline(ctx, x + 46, y + 118, 20, P.yellow, 2);
-    R.text(ctx, s.mg.emoji, x + 46, y + 124, { size: 16, align: "center", color: P.white, shadow: false });
+    const avX = x + 46;
+    const avY = curY + dLines.length * dH / 2 - 6;
+    R.circle(ctx, avX, avY, 20, "#1c1e33");
+    R.circleOutline(ctx, avX, avY, 20, P.yellow, 2);
+    R.text(ctx, s.mg.emoji, avX, avY + 6, { size: 16, align: "center", color: P.white, shadow: false });
 
-    const textX = x + 78, textY = y + 100, maxW = cw - 92;
-    const lines = R.wrap(ctx, ach.desc, maxW, 9);
-    const full = lines.join("\n");
+    const textX = avX + 32;
+    const full = dLines.join("\n");
     const typedFrac = typed == null ? 1 : clamp(typed, 0, 1);
     const chars = Math.floor(full.length * typedFrac);
     let budget = chars;
     let done = true;
     let drawn = "";
-    let lastY = textY;
-    for (let i = 0; i < lines.length && budget > 0; i++) {
-      let ln = lines[i];
+    let lastY = curY;
+    for (let i = 0; i < dLines.length && budget > 0; i++) {
+      let ln = dLines[i];
       if (budget < ln.length) { ln = ln.slice(0, budget); done = false; }
       budget -= ln.length + 1;
-      R.text(ctx, ln, textX, textY + i * 16, { size: 9, align: "left", color: P.cream });
+      R.text(ctx, ln, textX, curY + i * dH, { size: dSize, align: "left", color: P.cream });
       drawn = ln;
-      lastY = textY + i * 16;
+      lastY = curY + i * dH;
     }
     if (!done && Math.floor(s.time * 6) % 2 === 0) {
       const wd = ctx.measureText(drawn).width;
-      R.rect(ctx, textX + wd + 3, lastY - 8, 5, 10, P.yellow);
+      const cH = Math.round(dSize * 1.15);
+      R.rect(ctx, textX + wd + 3, lastY - cH, 5, cH, P.yellow);
     }
-    R.text(ctx, "TIRO " + (s.shot + 1) + " DE " + s.mg.shots + " · " + s.mg.emoji, x + cw / 2, y + ch - 14, { size: 9, align: "center", color: P.blue });
+    R.text(ctx, "TIRO " + (s.shot + 1) + " DE " + s.mg.shots + " · " + s.mg.emoji, x + cw / 2, y + ch - 12, { size: 9, align: "center", color: P.blue });
   }
 function drawBanner(ctx, str, sub, color) {
     R.rect(ctx, 0, 0, W, H, "rgba(13,14,26,0.4)");
@@ -172,10 +203,9 @@ function drawBanner(ctx, str, sub, color) {
       for (let bx = 40; bx < W; bx += 60) {
         R.line(ctx, bx, 332, bx, 448, "rgba(0,0,0,0.10)", 2);
       }
-      // marcas pintadas: línea de fondo, círculos central y de tiro libre
+      // marcas pintadas: línea de fondo y círculo central
       R.line(ctx, 740, 330, 740, 450, P.white, 3);
       R.ellipse(ctx, 390, 400, 80, 15, P.white, 3);
-      R.ellipse(ctx, 560, 404, 90, 17, P.white, 3);
 
       // tablero + aro + red (sprite grande) con sombra en el suelo
       drawFloorShadow(ctx, HOOP_X, 400, 42);

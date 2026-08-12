@@ -40,8 +40,8 @@ assert(parsed.football[0].dialogs.length === 2, "football disparo 1: 2 dialogos"
 assert(parsed.archery[0].dialogs.length === 1, "archery diana 1: dialogo unico");
 
 const b1 = parsed.basketball[0].dialogs[0];
-assert(b1.type === "HABILIDAD TÉCNICA" && b1.desc.indexOf("Gestión de riesgos") === 0, "basketball cesta1 dialogo1 contenido");
-assert(parsed.basketball[0].dialogs[1].type === "HABILIDAD BLANDA" && parsed.basketball[0].dialogs[1].desc.indexOf("Liderazgo situacional") === 0, "basketball cesta1 dialogo2 contenido");
+assert(b1.type === "HABILIDAD TÉCNICA" && b1.desc.indexOf("Identificación") === 0, "basketball cesta1 dialogo1 contenido");
+assert(parsed.basketball[0].dialogs[1].type === "HABILIDAD BLANDA" && parsed.basketball[0].dialogs[1].desc.length > 0, "basketball cesta1 dialogo2 contenido");
 assert(parsed.football[0].dialogs[1].type === "CERTIFICACIÓN RECOMENDADA" && parsed.football[0].dialogs[1].desc.indexOf("Project Management Professional") === 0, "football disparo1 dialogo2 certificacion");
 assert(parsed.archery[3].dialogs[0].desc.indexOf("Integridad") === 0, "archery diana4 contenido");
 
@@ -78,7 +78,7 @@ const mg = new IPM.scenes.Minigame(game, 0);
 mg.shot = 0;
 mg.buildCardQueue();
 assert(mg.cardQueue.length === 2, "tiro 1 -> cola con 2 dialogos de aciertos.md");
-assert(mg.cardAch.desc.indexOf("Gestión de riesgos") === 0, "card actual = dialogo 1 de aciertos.md");
+assert(mg.cardAch.type === "HABILIDAD TÉCNICA" && mg.cardAch.desc.indexOf("Identificación") === 0, "card actual = dialogo 1 de aciertos.md");
 mg.cardT = mg.cardDur + 0.5;
 try { mg.render(makeCtx()); assert(true, "tarjeta renderiza el dialogo de aciertos.md"); }
 catch (e) { assert(false, "tarjeta falla al renderizar: " + e.message); }

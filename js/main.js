@@ -17,9 +17,7 @@ IPM.game = (function () {
     },
     get scene() { return current; },
     isUnlocked: function (mgIndex) {
-      if (mgIndex === 0) return true;
-      if (mgIndex === 1) return this.progress.completed.basketball === true;
-      if (mgIndex === 2) return this.progress.completed.basketball === true && this.progress.completed.football === true;
+      if (mgIndex >= 0 && mgIndex <= 2) return true;
       return false;
     },
     completeMinigame: function (id) {

@@ -9,27 +9,27 @@ Este documento contiene la estructura de diálogos y contenido que se despliega 
 
 ### 🏀 Cesta 1
 - **Gestión de riesgos (Habilidad Técnica):**  
-  > *"(identificación, mitigación y planes de contingencia)."*
-- **Diálogo 2 (Habilidad Blanda):**  
-  > *"Liderazgo situacional e inspiración de equipos."*
+  > *"Identificación, mitigación y planes de contingencia."*
+- **Liderazgo situacional e inspiración de equipos. (Habilidad Blanda):**  
+  > *"Falta descripción"*
 
 ### 🏀 Cesta 2
-- **Diálogo 1 (Habilidad Técnica):**  
-  > *"Planificación y estimación (cronogramas, presupuestos, alcance y asignación de recursos)."*
-- **Diálogo 2 (Habilidad Blanda):**  
-  > *"Comunicación asertiva y clara (tanto técnica como gerencial)."*
+- **Planificación y estimación (Habilidad Técnica):**  
+  > *"Cronogramas, presupuestos, alcance y asignación de recursos."*
+- **Comunicación asertiva y clara (Habilidad Blanda):**  
+  > *"Tanto técnica como gerencial."*
 
 ### 🏀 Cesta 3
-- **Diálogo 1 (Habilidad Técnica):**  
-  > *"Manejo de metodologías (ágiles como Scrum/Kanban y predictivas como Waterfall)."*
-- **Diálogo 2 (Habilidad Blanda):**  
-  > *"Empatía e inteligencia emocional para resolver conflictos."*
+- **Manejo de metodologías (Habilidad Técnica):**  
+  > *"Metodología Agiles como Scrum/Kanban y predictivas como Waterfall."*
+- **Empatía e inteligencia emocional para resolver conflictos. (Habilidad Blanda):**  
+  > *"Falta descripción"*
 
 ### 🏀 Cesta 4
-- **Diálogo 1 (Habilidad Técnica):**  
-  > *"Dominio de herramientas de gestión (Jira, Trello, Asana, MS Project)."*
-- **Diálogo 2 (Habilidad Blanda):**  
-  > *"Pensamiento crítico y resolución de problemas."*
+- **Dominio de herramientas de gestión (Habilidad Técnica):**  
+  > *"Jira, Trello, Asana, MS Project."*
+- **Pensamiento crítico y resolución de problemas. (Habilidad Blanda):**  
+  > *"Falta descripción"*
 
 ---
 
@@ -37,8 +37,8 @@ Este documento contiene la estructura de diálogos y contenido que se despliega 
 * **Estructura:** Cada gol anotado desbloquea dos diálogos consecutivos (Competencias Claves y Certificaciones Recomendadas).
 
 ### ⚽ Disparo 1
-- **Diálogo 1 (Competencia Clave):**  
-  > *"Gestión y optimización del tiempo."*
+- **Gestión y optimización del tiempo. (Competencia Clave):**  
+  > *"Falta descripción"*
 - **Diálogo 2 (Certificación Recomendada):**  
   > *"Project Management Professional (PMP) para gestión general/tradicional."*
 
@@ -92,6 +92,8 @@ Este documento contiene la estructura de diálogos y contenido que se despliega 
   *Anticipar problemas ahorra presupuesto y tiempo, asegurando que los entregables cumplan con la calidad exigida.*
 - **Adaptabilidad:**  
   *Los requerimientos cambian constantemente; la rigidez destruye la dinámica de trabajo y retrasa el producto final.*
+
+### ----------------------------------------------------------------------
 
 ### 2. Competencias Más Mencionadas
 - **Liderazgo y Comunicación:** Motor diario del PM para mover e inspirar al equipo.

@@ -80,6 +80,9 @@ for (const idx of [0, 1, 2]) {
   mg.state = "result"; mg.result = { zone: "miss", value: 0.1 }; mg.resultT = 1.0; render(id + " result miss", mg);
   mg.state = "card"; mg.cardT = 0.6; mg.cardAch = mg.mg.achievements[0]; render(id + " card escribiendo", mg);
   mg.state = "card"; mg.cardT = 5.0; mg.cardAch = mg.mg.achievements[0]; render(id + " card lista", mg);
+  const LONG_DESC = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
+  mg.state = "card"; mg.cardT = 0.6; mg.cardAch = { type: "TÉCNICA", title: "Título de longitud considerable para forzar el ajuste dentro de la tarjeta de diálogo", desc: LONG_DESC }; render(id + " card desc larga escribiendo", mg);
+  mg.state = "card"; mg.cardT = 5.0; mg.cardAch = { type: "TÉCNICA", title: "Título de longitud considerable para forzar el ajuste dentro de la tarjeta de diálogo", desc: LONG_DESC }; render(id + " card desc larga lista", mg);
   mg.state = "clear"; mg.timer = 0; render(id + " clear", mg);
   mg.state = "gameover"; render(id + " gameover", mg);
 }
