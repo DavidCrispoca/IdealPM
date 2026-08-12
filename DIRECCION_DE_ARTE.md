@@ -65,7 +65,7 @@ La paleta se basa en tonos **cálidos, saturados y alegres** inspirados en el am
 
 ### **🏀 Minijuego 1: Basketball (Cancha de Madera o Exterior)**
 - **Fondo:** Cancha retro de madera cálida pulida con marcadores blancos nítidos y gradiente de luz ambiental. Red de canasta con física ligera y movimiento de red al encestar.
-- **Cámara (implementada):** vista **lateral** estilo baloncesto retro de 16-bit: jugador grande (sprite ×2.6) a la izquierda lanzando a un aro grande (×2.6) a la derecha, sobre una cancha plana de parquet con marcas pintadas (línea de fondo, círculo central y de tiro libre) y grada con público. El balón vuela en arco con sombra proyectada que se mueve por el suelo.
+- **Cámara (implementada):** vista **lateral** estilo baloncesto retro de 16-bit: jugador grande (sprite ×2.6) a la izquierda lanzando a un aro grande (×2.6) a la derecha, sobre una cancha plana de parquet con marcas pintadas (línea de fondo y un solo círculo central) y grada con público. El balón vuela en arco con sombra proyectada que se mueve por el suelo.
 - **Efectos Visuales de Acierto:**
   - Chispas retro / destellos dorados (`#FFD700`) al pasar el balón limpiamente.
   - Texto flotante pixel art *"¡PERFECTO!"* o *"¡ACIERTO!"* con animación hacia arriba.
@@ -111,3 +111,42 @@ Aplica la nueva Dirección de Arte para "IdealPM":
 4. Implementa animaciones de partículas simples (estrellas/brillos de 2x2 píxeles) al lograr cada acierto.
 5. Asegúrate de que las fuentes de texto mantengan proporciones nítidas y legibles sin verse borrosas.
 ```
+
+
+---
+
+## 7. IMPLEMENTACIÓN ACTUAL VS. GUÍA (ESTADO DE ARTE)
+
+### 7.1 Resolución del canvas
+- La guía propone **480×270**; el juego implementa **800×450** (mismo 16:9,
+  más detalle por píxel). El renderizado CSS mantiene `image-rendering: pixelated`
+  y escalado entero, y `IPM.CONFIG.fontScale: 1.32` escala todas las fuentes.
+
+### 7.2 Sistema de sprites implementado (`js/sprites.js`)
+- Los sprites se definen como **SVG embebidos (data-URI)** en lugar de archivos
+  externos, se rasterizan a baja resolución y se amplían con
+  `imageSmoothingEnabled = false` → píxeles nítidos estilo retro sin red.
+- Si `IPM.CONFIG.spriteURLs` define URLs, se intentan cargar primero y se cae al
+  SVG embebido si fallan (precarga en el boot).
+- Cada escena dibuja con `spriteOr()`: usa el sprite si está listo, o el
+  **fallback procedural** (rectángulos con dos tonos) si no.
+- Sprites incluidos: jugador de baloncesto, tablero/aro/red, balón de baloncesto,
+  arquero, balón de fútbol, diana y flecha → 8 sprites rasterizados.
+- **Sombras proyectadas:** `drawFloorShadow()` añade sombras suaves en el suelo
+  para balones, jugador, arquero y el aro (drop shadows de la sección 2.b).
+
+### 7.3 Estado visual por escena
+- **🏀 Basketball:** cancha lateral de parquet con marcas pintadas (línea de
+  fondo y **círculo central**; se eliminó el círculo de tiro libre para dejar una
+  sola marca circular), grada con público, poste con base hasta el suelo,
+  jugador grande (×2.6) y aro grande (×2.6).
+- **⚽ Fútbol:** césped con textura pixelada, portería con red y arquero con
+  animación de atajada (dive).
+- **🎯 Arquería:** paisaje campestre, diana frontal con anillos y flecha en
+  primer plano.
+- **🏆 Podio:** tres columnas de reflexión con paneles dorados (secciones 8.2).
+
+### 7.4 Pendiente según la guía
+- Partículas avanzadas (polvo/confeti): solo hay chispas simples en el enceste.
+- Spritesheets externos (OpenGameArt/Kenney): opcional vía `spriteURLs`.
+- Animación de celebración del personaje con 3 frames: pendiente.

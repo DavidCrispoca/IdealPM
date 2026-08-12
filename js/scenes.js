@@ -29,17 +29,9 @@ IPM.scenes = (function () {
   // ---------- HUD ----------
   function drawHUD(ctx, s) {
     const n = clamp(s.shot, 0, s.mg.shots - 1);
-    for (let i = 0; i < s.mg.lives; i++) {
-      R.text(ctx, "❤", 18 + i * 19, 26, {
-        size: 12,
-        color: i < s.lives ? P.red : P.gray,
-        align: "left",
-        shadow: i < s.lives
-      });
-    }
-    R.text(ctx, "×" + s.mg.lives, 18 + s.mg.lives * 19 + 4, 26, { size: 10, color: P.cream, align: "left" });
+    R.text(ctx, "INTENTOS " + s.attempts + "/" + s.mg.shots, 14, 26, { size: 11, color: P.cream, align: "left" });
     R.text(ctx, s.mg.emoji + " TIRO " + (n + 1) + " DE " + s.mg.shots, W / 2, 28, { size: 14, bold: true, align: "center", color: P.white });
-    R.text(ctx, "ACIERTOS " + s.successes + "/" + s.mg.shots, W - 16, 28, { size: 11, align: "right", color: P.yellow });
+    R.text(ctx, "ACIERTOS " + s.successes + "/" + s.mg.needed, W - 16, 28, { size: 11, align: "right", color: P.yellow });
     R.rect(ctx, 0, 40, W, 3, P.black);
   }
 
@@ -50,53 +42,53 @@ IPM.scenes = (function () {
     const inT = clamp(t / 0.35, 0, 1);
     const rise = (1 - inT) * 16;
     const cx = W / 2;
-    const cw = 440;
+    const cw = 560;
 
-    const maxW = cw - 92;
-    let dSize = 9;
+    const maxW = cw - 96;
+    let dSize = 15;
     let dLines = R.wrap(ctx, ach.desc, maxW, dSize);
-    while (dLines.length > 4 && dSize > 6) {
+    while (dLines.length > 5 && dSize > 11) {
       dSize--;
       dLines = R.wrap(ctx, ach.desc, maxW, dSize);
     }
-    const dH = Math.max(13, Math.round(dSize * 1.6));
+    const dH = Math.max(20, Math.round(dSize * 1.55));
 
-    let tSize = 15;
+    let tSize = 24;
     let tLines = R.wrap(ctx, ach.title, cw - 40, tSize);
-    if (tLines.length > 2) { tSize = 13; tLines = R.wrap(ctx, ach.title, cw - 40, tSize); }
+    if (tLines.length > 2) { tSize = 19; tLines = R.wrap(ctx, ach.title, cw - 40, tSize); }
     if (tLines.length > 2) tLines = tLines.slice(0, 2);
 
-    const headerH = 26;
-    const pad = 16;
-    const bodyH = 44 + tLines.length * 18 + dLines.length * dH;
-    const footerH = 20;
-    const ch = Math.min(320, Math.max(180, headerH + bodyH + footerH + pad));
+    const headerH = 34;
+    const pad = 18;
+    const bodyH = 58 + tLines.length * 28 + dLines.length * dH;
+    const footerH = 24;
+    const ch = Math.min(400, Math.max(230, headerH + bodyH + footerH + pad));
 
     const x = cx - cw / 2;
-    let y = 120 - ch / 2 + rise;
-    if (y < 8) y = 8;
+    let y = 225 - ch / 2 + rise;
+    if (y < 12) y = 12;
 
     R.rect(ctx, 0, 0, W, H, "rgba(13,14,26,0.5)");
     R.panel(ctx, x, y, cw, ch, { fill: P.panel, light: P.yellow });
     R.rect(ctx, x, y, cw, headerH, P.black);
-    R.text(ctx, "★ ¡ACCIÓN DESBLOQUEADA!", x + cw / 2, y + 18, { size: 12, bold: true, align: "center", color: P.yellow });
+    R.text(ctx, "★ ¡ACCIÓN DESBLOQUEADA!", x + cw / 2, y + 22, { size: 15, bold: true, align: "center", color: P.yellow });
 
-    let curY = y + headerH + 20;
-    R.text(ctx, "[" + ach.type + "]", x + cw / 2, curY, { size: 9, align: "center", color: P.orange });
-    curY += 20;
+    let curY = y + headerH + 24;
+    R.text(ctx, "[" + ach.type + "]", x + cw / 2, curY, { size: 12, align: "center", color: P.orange });
+    curY += 26;
     for (let i = 0; i < tLines.length; i++) {
       R.text(ctx, tLines[i], x + cw / 2, curY, { size: tSize, bold: true, align: "center", color: P.white });
-      curY += 18;
+      curY += 28;
     }
-    curY += 12;
+    curY += 14;
 
-    const avX = x + 46;
+    const avX = x + 62;
     const avY = curY + dLines.length * dH / 2 - 6;
-    R.circle(ctx, avX, avY, 20, "#1c1e33");
-    R.circleOutline(ctx, avX, avY, 20, P.yellow, 2);
-    R.text(ctx, s.mg.emoji, avX, avY + 6, { size: 16, align: "center", color: P.white, shadow: false });
+    R.circle(ctx, avX, avY, 26, "#1c1e33");
+    R.circleOutline(ctx, avX, avY, 26, P.yellow, 2);
+    R.text(ctx, s.mg.emoji, avX, avY + 8, { size: 22, align: "center", color: P.white, shadow: false });
 
-    const textX = avX + 32;
+    const textX = avX + 42;
     const full = dLines.join("\n");
     const typedFrac = typed == null ? 1 : clamp(typed, 0, 1);
     const chars = Math.floor(full.length * typedFrac);
@@ -115,9 +107,9 @@ IPM.scenes = (function () {
     if (!done && Math.floor(s.time * 6) % 2 === 0) {
       const wd = ctx.measureText(drawn).width;
       const cH = Math.round(dSize * 1.15);
-      R.rect(ctx, textX + wd + 3, lastY - cH, 5, cH, P.yellow);
+      R.rect(ctx, textX + wd + 3, lastY - cH, 6, cH, P.yellow);
     }
-    R.text(ctx, "TIRO " + (s.shot + 1) + " DE " + s.mg.shots + " · " + s.mg.emoji, x + cw / 2, y + ch - 12, { size: 9, align: "center", color: P.blue });
+    R.text(ctx, "TIRO " + (s.shot + 1) + " DE " + s.mg.shots + " · " + s.mg.emoji, x + cw / 2, y + ch - 12, { size: 12, align: "center", color: P.blue });
   }
 function drawBanner(ctx, str, sub, color) {
     R.rect(ctx, 0, 0, W, H, "rgba(13,14,26,0.4)");
@@ -295,23 +287,45 @@ function drawBanner(ctx, str, sub, color) {
   // =====================================================================
   // THEME: FOOTBALL
   // =====================================================================
-  function drawKeeper(ctx, x, y, jersey, dive) {
-    dive = dive || 0;
-    const dx = dive;
-    drawFloorShadow(ctx, x + dx, y, 22);
-    spriteOr(ctx, "soccerKeeper", x + dx, y - 32, 1.6, function () {
-      R.rect(ctx, x - 9 + dx, y - 26, 8, 26, P.black);
-      R.rect(ctx, x + 1 + dx, y - 26, 8, 26, P.black);
-      R.rect(ctx, x - 12 + dx, y - 52, 24, 30, jersey);
-      R.rectOutline(ctx, x - 12 + dx, y - 52, 24, 30, P.black, 1);
-      R.rect(ctx, x - 18 + dx, y - 50, 8, 18, jersey);
-      R.rect(ctx, x + 10 + dx, y - 50, 8, 18, jersey);
-      R.rect(ctx, x - 20 + dx, y - 34, 10, 7, P.white);
-      R.rect(ctx, x + 10 + dx, y - 34, 10, 7, P.white);
-      R.rect(ctx, x - 8 + dx, y - 68, 16, 16, P.skin);
-      R.rectOutline(ctx, x - 8 + dx, y - 68, 16, 16, P.black, 1);
-      R.rect(ctx, x - 8 + dx, y - 72, 16, 5, P.hair);
+  const SHOOTER_X = 240;
+  const SHOOTER_Y = 370;
+  const BALL_X = 240;
+  const BALL_Y = 360;
+  const KEEPER_X = 700;
+  const KEEPER_Y = 340;
+
+  function drawKeeper(ctx, x, y, jersey) {
+    drawFloorShadow(ctx, x, y, 22);
+    spriteOr(ctx, "soccerKeeper", x, y - 32, 1.6, function () {
+      R.rect(ctx, x - 9, y - 26, 8, 26, P.black);
+      R.rect(ctx, x + 1, y - 26, 8, 26, P.black);
+      R.rect(ctx, x - 12, y - 52, 24, 30, jersey);
+      R.rectOutline(ctx, x - 12, y - 52, 24, 30, P.black, 1);
+      R.rect(ctx, x - 18, y - 50, 8, 18, jersey);
+      R.rect(ctx, x + 10, y - 50, 8, 18, jersey);
+      R.rect(ctx, x - 20, y - 34, 10, 7, P.white);
+      R.rect(ctx, x + 10, y - 34, 10, 7, P.white);
+      R.rect(ctx, x - 8, y - 68, 16, 16, P.skin);
+      R.rectOutline(ctx, x - 8, y - 68, 16, 16, P.black, 1);
+      R.rect(ctx, x - 8, y - 72, 16, 5, P.hair);
     });
+  }
+
+  function drawShooter(ctx, x, y, kick) {
+    kick = kick || 0;
+    drawFloorShadow(ctx, x, y, 20);
+    R.rect(ctx, x - 10, y - 24, 8, 24, P.black);
+    R.rect(ctx, x + 2, y - 24 - kick * 8, 8, 24, P.black);
+    R.rect(ctx, x - 12, y - 52, 24, 30, P.yellow);
+    R.rectOutline(ctx, x - 12, y - 52, 24, 30, P.black, 1);
+    R.rect(ctx, x - 18, y - 50, 8, 18, P.yellow);
+    R.rect(ctx, x + 10, y - 50, 8, 18, P.yellow);
+    R.rect(ctx, x - 20, y - 34, 10, 7, P.skin);
+    R.rect(ctx, x + 10, y - 34, 10, 7, P.skin);
+    R.rect(ctx, x - 11, y - 30, 22, 7, P.white);
+    R.rect(ctx, x - 8, y - 68, 16, 16, P.skin);
+    R.rectOutline(ctx, x - 8, y - 68, 16, 16, P.black, 1);
+    R.rect(ctx, x - 8, y - 72, 16, 5, P.hair);
   }
 
   function drawSoccerBall(ctx, bx, by) {
@@ -321,7 +335,7 @@ function drawBanner(ctx, str, sub, color) {
   }
 
   const footballTheme = {
-    drawBackground: function (ctx) {
+    drawBackground: function (ctx, s) {
       R.rect(ctx, 0, 0, W, H, P.sky2);
       R.rect(ctx, 0, 60, W, 60, P.bgDark);
       for (let i = 0; i < 7; i++) {
@@ -343,39 +357,41 @@ function drawBanner(ctx, str, sub, color) {
       R.rectOutline(ctx, 620, 146, 180, 6, P.black, 1);
       for (let gx = 626; gx <= 792; gx += 12) R.line(ctx, gx, 152, gx, 370, "rgba(255,255,255,0.25)", 1);
       for (let gy = 156; gy <= 366; gy += 12) R.line(ctx, 626, gy, 794, gy, "rgba(255,255,255,0.25)", 1);
-      drawKeeper(ctx, 700, 340, P.blue, 0);
+      const kick = s && s.state === "result" && s.result && s.result.zone !== "miss"
+        ? Math.sin(Math.min(1, s.resultT / 0.45) * PI)
+        : 0;
+      drawShooter(ctx, SHOOTER_X, SHOOTER_Y, kick);
+      drawKeeper(ctx, KEEPER_X, KEEPER_Y, P.blue);
+      if (!s || s.state === "intro" || s.state === "aim") {
+        drawSoccerBall(ctx, BALL_X, BALL_Y);
+      }
     },
     drawHit: function (ctx, t, s) {
-      const x = R.quad(t, 240, 480, 746);
-      const y = R.quad(t, 360, 200, 172);
-      drawFloorShadow(ctx, lerp(240, 746, clamp(t, 0, 1)), 370, lerp(16, 6, clamp(t, 0, 1)));
+      const x = R.quad(t, BALL_X, 480, 746);
+      const y = R.quad(t, BALL_Y, 200, 172);
+      drawFloorShadow(ctx, lerp(BALL_X, 746, clamp(t, 0, 1)), 370, lerp(16, 6, clamp(t, 0, 1)));
       drawSoccerBall(ctx, x, y);
-      const dive = -clamp(t * 90, 0, 90);
-      drawKeeper(ctx, 700, 340, P.blue, dive);
       if (t >= 0.7) {
         const alpha = Math.floor((t - 0.7) / 0.2 * 8) % 2 === 0 ? 1 : 0.35;
         R.text(ctx, s.result.zone === "perfect" ? "¡GOL PERFECTO!" : "¡GOOOL!", 440, 118, { size: 26, bold: true, align: "center", color: alpha === 1 ? P.yellow : P.white });
       }
     },
     drawMiss: function (ctx, t, s) {
-      const reach = 740;
       let bx, by;
       if (t < 0.6) {
         const u = t / 0.6;
-        bx = R.quad(u, 240, 460, reach);
-        by = R.quad(u, 360, 240, 280);
+        bx = R.quad(u, BALL_X, 500, 845);
+        by = R.quad(u, BALL_Y, 195, 190);
       } else {
         const u = (t - 0.6) / 0.4;
-        bx = lerp(reach, 620, u);
-        by = 280 + 70 * u;
+        bx = lerp(845, 890, u);
+        by = R.quad(u, 190, 170, 330);
       }
-      drawFloorShadow(ctx, lerp(240, 620, clamp(t, 0, 1)), 370, lerp(16, 10, clamp(t, 0, 1)));
+      drawFloorShadow(ctx, lerp(BALL_X, 890, clamp(t, 0, 1)), 370, lerp(16, 9, clamp(t, 0, 1)));
       drawSoccerBall(ctx, bx, by);
-      const dive = clamp(t * 160, 0, 60);
-      drawKeeper(ctx, 700, 340, P.blue, dive);
       if (t >= 0.75) {
         const alpha = Math.floor((t - 0.75) / 0.15 * 8) % 2 === 0 ? 1 : 0.35;
-        R.text(ctx, "¡ATAJADA!", 440, 118, { size: 24, bold: true, align: "center", color: alpha === 1 ? P.red : P.white });
+        R.text(ctx, "¡FUERA!", 440, 118, { size: 24, bold: true, align: "center", color: alpha === 1 ? P.red : P.white });
       }
     }
   };
@@ -512,7 +528,7 @@ function drawBanner(ctx, str, sub, color) {
       R.text(ctx, "IDEALPM", W / 2 + 4, 122 + wob, { size: 46, bold: true, align: "center", color: P.yellow });
       R.text(ctx, "IDEALPM", W / 2, 120 + wob, { size: 46, bold: true, align: "center", color: P.white });
       R.text(ctx, "EL PERFIL DEL PROJECT MANAGER IDEAL", W / 2, 154, { size: 11, align: "center", color: P.blue });
-      R.text(ctx, "CONSIGUE LOS 7 ACIERTOS DE CADA MINIJUEGO PARA DESBLOQUEAR EL SIGUIENTE", W / 2, 170, { size: 8, align: "center", color: P.cream });
+      R.text(ctx, "4 ACIERTOS EN 7 INTENTOS PARA COMPLETAR Y DESBLOQUEAR EL SIGUIENTE", W / 2, 170, { size: 8, align: "center", color: P.cream });
 
       const sel = this.unlocked();
       const selIdx = sel.length ? sel[this.opt % sel.length] : 0;
@@ -569,7 +585,7 @@ function drawBanner(ctx, str, sub, color) {
 
     resetRun() {
       this.shot = 0;
-      this.lives = this.mg.lives;
+      this.attempts = this.mg.shots;
       this.successes = 0;
       this.perfects = 0;
       this.state = "intro";
@@ -658,16 +674,23 @@ function drawBanner(ctx, str, sub, color) {
 
     endResult() {
       const zone = this.result.zone;
+      const lastAttempt = this.shot >= this.mg.shots - 1;
+      this.attempts--;
       if (zone !== "miss") {
         this.successes++;
         if (zone === "perfect") this.perfects++;
         this.game.stats.goods++;
         if (zone === "perfect") this.game.stats.perfects++;
-        if (this.shot >= this.mg.shots - 1) {
+        if (this.successes >= this.mg.needed) {
           this.state = "clear";
           this.timer = 0;
           this.game.completeMinigame(this.mg.id);
           IPM.audio.fanfare();
+          return;
+        }
+        if (lastAttempt) {
+          this.state = "gameover";
+          IPM.audio.gameOver();
         } else {
           this.shot++;
           this.state = "intro";
@@ -675,12 +698,12 @@ function drawBanner(ctx, str, sub, color) {
         }
       } else {
         this.game.stats.misses++;
-        this.lives--;
         this.cardAch = null;
-        if (this.lives <= 0) {
+        if (lastAttempt) {
           this.state = "gameover";
           IPM.audio.gameOver();
         } else {
+          this.shot++;
           this.state = "intro";
           this.timer = 0;
         }
@@ -738,26 +761,26 @@ function drawBanner(ctx, str, sub, color) {
         if (this.result.zone === "miss") this.theme.drawMiss(ctx, t, this);
         else this.theme.drawHit(ctx, t, this);
         if (this.result.zone === "miss") {
-          R.text(ctx, "¡FALLASTE! -1 VIDA", W / 2, 300, { size: 16, bold: true, align: "center", color: P.red });
+          R.text(ctx, "¡FALLASTE! -1 INTENTO", W / 2, 300, { size: 16, bold: true, align: "center", color: P.red });
         }
       } else if (this.state === "card") {
         const typed = clamp(this.cardT / this.cardDur, 0, 1);
         drawCard(ctx, this, Math.min(0.6, this.cardT), typed);
         if (this.cardQueue.length > 1) {
-          R.text(ctx, "DIÁLOGO " + (this.cardIdx + 1) + " DE " + this.cardQueue.length, W / 2, 225, { size: 10, bold: true, align: "center", color: P.blue });
+          R.text(ctx, "DIÁLOGO " + (this.cardIdx + 1) + " DE " + this.cardQueue.length, W / 2, 436, { size: 12, bold: true, align: "center", color: P.blue });
         }
         if (typed >= 1 && Math.floor(this.time * 3) % 2 === 0) {
           R.text(ctx, "▶ PRESIONA ESPACIO / TOCA PARA CONTINUAR ◀", W / 2, 250, { size: 11, bold: true, align: "center", color: P.green });
         }
       } else if (this.state === "clear") {
-        drawBanner(ctx, "¡NIVEL SUPERADO!", "Perfil del PM más completo · Aciertos " + this.successes + "/" + this.mg.shots, P.yellow);
+        drawBanner(ctx, "¡NIVEL SUPERADO!", "Aciertos " + this.successes + "/" + this.mg.needed + " · ¡Pasa al siguiente minijuego!", P.yellow);
         const blink = Math.floor(this.time * 3) % 2 === 0;
         if (blink) R.text(ctx, "CARGANDO SIGUIENTE MINIJUEGO...", W / 2, 330, { size: 11, align: "center", color: P.blue });
       } else if (this.state === "gameover") {
         R.rect(ctx, 0, 0, W, H, "rgba(13,14,26,0.75)");
         R.panel(ctx, 190, 112, 420, 240, { fill: P.panel, light: P.red });
-        R.text(ctx, "¡SE ACABARON LAS VIDAS!", W / 2, 168, { size: 20, bold: true, align: "center", color: P.red });
-        R.text(ctx, "Llegaste al tiro " + (this.shot + 1) + " de " + this.mg.shots, W / 2, 200, { size: 11, align: "center", color: P.white });
+        R.text(ctx, "¡SIN MÁS INTENTOS!", W / 2, 168, { size: 20, bold: true, align: "center", color: P.red });
+        R.text(ctx, "Conseguiste " + this.successes + " de " + this.mg.needed + " aciertos · Repite el minijuego", W / 2, 200, { size: 11, align: "center", color: P.white });
         R.text(ctx, this.mg.emoji + " " + this.mg.name, W / 2, 222, { size: 10, align: "center", color: P.orange });
         const opts = ["REINTENTAR", "MENÚ"];
         opts.forEach(function (o, i) {
@@ -793,7 +816,8 @@ function drawBanner(ctx, str, sub, color) {
       R.text(ctx, IPM.PODIUM.intro, W / 2, 114, { size: 10, align: "center", color: P.white });
 
       const st = this.game.stats;
-      R.text(ctx, "PERFECTOS " + st.perfects + " · BUENOS " + st.goods + " · FALLOS " + st.misses + " · ACIERTOS 21/21", W / 2, 136, { size: 10, align: "center", color: P.orange });
+      const totalAch = IPM.MINIGAMES.reduce(function (a, m) { return a + m.needed; }, 0);
+      R.text(ctx, "PERFECTOS " + st.perfects + " · BUENOS " + st.goods + " · FALLOS " + st.misses + " · ACIERTOS " + totalAch + "/" + totalAch, W / 2, 136, { size: 10, align: "center", color: P.orange });
 
       const cols = [IPM.PODIUM.essentials, IPM.PODIUM.industry, IPM.PODIUM.context];
       cols.forEach(function (col, i) {

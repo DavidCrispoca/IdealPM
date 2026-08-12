@@ -5,8 +5,8 @@ IPM.CONFIG = {
   width: 800,
   height: 450,
   globalRules: {
-    livesPerMinigame: 10,
-    shotsToPass: 7
+    attemptsPerMinigame: 7,
+    aciertosToComplete: 4
   },
   cameraModes: {
     basketball: "side_view_half_court",
@@ -35,7 +35,7 @@ IPM.MINIGAMES = [
     emoji: "🏀",
     intro: "HABILIDADES TÉCNICAS Y BLANDAS",
     shots: 7,
-    lives: 10,
+    needed: 4,
     achievements: [
       { type: "TÉCNICA", title: "Gestión de Riesgos", desc: "Anticipar problemas ahorra presupuesto y tiempo, asegurando entregables de alta calidad." },
       { type: "TÉCNICA", title: "Planificación y Estimación", desc: "Cronogramas y presupuestos realistas para controlar alcance, tiempo y costos." },
@@ -52,7 +52,7 @@ IPM.MINIGAMES = [
     emoji: "⚽",
     intro: "COMPETENCIAS CLAVE Y ATRIBUTOS",
     shots: 7,
-    lives: 10,
+    needed: 4,
     achievements: [
       { type: "COMPETENCIA", title: "Optimización del Tiempo", desc: "Priorizar y secuenciar tareas para cumplir deadlines sin sacrificar calidad." },
       { type: "COMPETENCIA", title: "Negociación de Expectativas", desc: "Alinear intereses con stakeholders y comunicar avances con transparencia." },
@@ -69,7 +69,7 @@ IPM.MINIGAMES = [
     emoji: "🎯",
     intro: "CERTIFICACIONES",
     shots: 7,
-    lives: 10,
+    needed: 4,
     achievements: [
       { type: "CERTIFICACIÓN", title: "PMP®", desc: "Project Management Professional, el estándar global de PMI para dirigir proyectos." },
       { type: "CERTIFICACIÓN", title: "CSM® / PSM I", desc: "Certified Scrum Master: dominio de Scrum para equipos ágiles." },
@@ -84,7 +84,7 @@ IPM.MINIGAMES = [
 
 IPM.PODIUM = {
   title: "PERFIL DEL PM IDEAL",
-  intro: "Con los 21 aciertos se completa el perfil del Project Manager ideal.",
+  intro: "Con los 12 aciertos se completa el perfil del Project Manager ideal.",
   essentials: {
     title: "1 · IMPRESCINDIBLES",
     items: [

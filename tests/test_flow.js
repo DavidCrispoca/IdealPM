@@ -102,8 +102,8 @@ assert(game.scene instanceof IPM.scenes.Podium, "llega al podio tras los 3 minij
 assert(game.progress.completed.basketball === true, "basketball marcado como completado");
 assert(game.progress.completed.football === true, "football marcado como completado");
 assert(game.progress.completed.archery === true, "archery marcado como completado");
-assert(totalPerfect === 21, "21 tiros perfectos acumulados");
-assert(game.stats.perfects === 21 && game.stats.goods === 21 && game.stats.misses === 0, "stats: 21 perfectos, 21 buenos, 0 fallos");
+assert(totalPerfect === 12, "12 tiros perfectos acumulados");
+assert(game.stats.perfects === 12 && game.stats.goods === 12 && game.stats.misses === 0, "stats: 12 perfectos, 12 buenos, 0 fallos");
 
 game.scene.handleInput("fire");
 assert(game.scene instanceof IPM.scenes.Menu, "podio -> menu");
@@ -113,12 +113,12 @@ let s = game.scene;
 forceAim(s);
 s.slider.needle = 0.0;
 const shotBefore = s.shot;
-const livesBefore = s.lives;
+const attemptsBefore = s.attempts;
 s.handleInput("fire");
 step(s);
 assert(s.state === "intro" || s.state === "aim", "tras fallo reintenta el tiro (intro o aim)");
-assert(s.shot === shotBefore, "tiro no avanza al fallar");
-assert(s.lives === livesBefore - 1, "pierde 1 vida al fallar");
+assert(s.shot === shotBefore + 1, "el tiro avanza al fallar");
+assert(s.attempts === attemptsBefore - 1, "consume 1 intento al fallar");
 assert(game.stats.misses === 1, "stats: 1 fallo registrado");
 
 forceAim(s);
@@ -128,7 +128,7 @@ while (game.scene === s && s.state !== "gameover" && guard2++ < 40) {
   step(s, 200);
 }
 assert(s.state === "gameover", "gameover al agotar vidas");
-assert(s.lives === 0, "0 vidas restantes");
+assert(s.attempts === 0, "0 intentos restantes");
 
 const prevOpt = s.goOpt;
 s.handleInput("down");

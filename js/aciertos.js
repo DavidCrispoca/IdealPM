@@ -2,11 +2,16 @@
 // Formato del documento (ver aciertos.md):
 //   ## <emoji> <NIVEL...>              -> minijuego (mapeo por emoji)
 //   ### <emoji> Cesta/Disparo/Diana N  -> acierto (orden = número de tiro)
-//   - **Diálogo N (<categoría>):**     -> etiqueta del diálogo
+//   - **Título:**                       -> etiqueta del diálogo (categoría derivada)
 //   > *"texto."*                        -> contenido (blockquote)
 // Los aciertos sin entrada en el documento usan los logros de config.js.
 IPM.aciertos = (function () {
   var MG_EMOJI = { "🏀": "basketball", "⚽": "football", "🎯": "archery" };
+  var MG_DIALOG_TYPES = {
+    basketball: ["HABILIDAD TÉCNICA", "HABILIDAD BLANDA"],
+    football: ["COMPETENCIA CLAVE", "CERTIFICACIÓN RECOMENDADA"],
+    archery: ["ATRIBUTO PERSONAL"]
+  };
 
   function cleanText(s) {
     return String(s)
@@ -43,10 +48,10 @@ IPM.aciertos = (function () {
         var mBullet = line.match(/^-\s*\*\*(.+?)\*\*\s*:?\s*$/);
         if (mBullet) {
           dialog = {};
-          var rest = mBullet[1].trim();
-          var paren = rest.match(/\((.*)\)/);
+          var rest = mBullet[1].trim().replace(/\s*:$/, "");
+          var types = MG_DIALOG_TYPES[mg];
           dialog.title = rest;
-          dialog.type = paren ? paren[1].toUpperCase() : "ACCIÓN";
+          dialog.type = types && types[entry.dialogs.length] ? types[entry.dialogs.length] : "ACCIÓN";
           dialog.desc = "";
           entry.dialogs.push(dialog);
         } else if (dialog && /^>/.test(line)) {

@@ -23,10 +23,10 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
 - **Cámara Lateral / Ángulo de Media Cancha:** Estilo tiro libre de fútbol retro o tiro en suspensión de baloncesto de 16-bit, donde el ángulo permite ver claramente la trayectoria del balón/flecha y la animación clara de **GOL / ENCESTADO / DIANA** o **FALLADO / FUERA**.
 
 ### **Sistema de Vidas y Tiros por Minijuego**
-- **Vidas Iniciales por Minijuego:** 10 Vidas (Corazones / Indicador retro).
-- **Número de Tiros / Intentos por Minijuego:** 7 Tiros en total para completar y superar el nivel.
-- **Mecánica de Fallo:** Si el jugador falla un tiro (agujas en zona roja del slider), pierde 1 vida, pero puede reintentar ese tiro actual hasta consumir las vidas o acertar los 7 tiros requeridos.
-- **Integración con `Aciertos.md`:** Los 7 tiros victoriosos de cada minijuego están mapeados directamente a la lista de aciertos/desbloqueos definida en el archivo externo `Aciertos.md`. Cada tiro acertado despliega la tarjeta/pop-up retro correspondiente con la habilidad, competencia o certificación lograda.
+- **Vidas Iniciales por Minijuego:** 7 Intentos (tiros).
+- **Número de Tiros / Intentos por Minijuego:** 7 Intentos en total; se necesitan 4 Aciertos para completar y superar el nivel.
+- **Mecánica de Fallo:** Si el jugador falla un tiro (agujas en zona roja del slider), gasta 1 intento y pasa al siguiente tiro. Al completar 4 Aciertos se supera el minijuego; si se agotan los 7 Intentos sin los 4 Aciertos, debe repetir el minijuego.
+- **Integración con `Aciertos.md`:** Los aciertos de cada minijuego están mapeados directamente a la lista de aciertos/desbloqueos definida en el archivo externo `Aciertos.md`. Cada tiro acertado despliega la tarjeta/pop-up retro correspondiente con la habilidad, competencia o certificación lograda.
 
 ---
 
@@ -47,13 +47,13 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
 [ PANTALLA INICIAL: IdealPM ]
             │
             ▼
-[ MINIJUEGO 1: BASKETBALL ] ──► (10 Vidas | 7 Tiros) ──► Habilidades Técnicas y Blandas
+[ MINIJUEGO 1: BASKETBALL ] ──► (7 Intentos | 4 Aciertos) ──► Habilidades Técnicas y Blandas
             │
             ▼
-[ MINIJUEGO 2: FÚTBOL ]      ──► (10 Vidas | 7 Tiros) ──► Competencias Claves y Atributos
+[ MINIJUEGO 2: FÚTBOL ]      ──► (7 Intentos | 4 Aciertos) ──► Competencias Claves y Atributos
             │
             ▼
-[ MINIJUEGO 3: TIRO AL BLANCO ] ──► (10 Vidas | 7 Tiros) ──► Certificaciones
+[ MINIJUEGO 3: TIRO AL BLANCO ] ──► (7 Intentos | 4 Aciertos) ──► Certificaciones
             │
             ▼
 [ PODIO FINAL & DASHBOARD ]  ──► (Perfil Completo + Reflexión Estratégica)
@@ -61,9 +61,9 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
 
 ---
 
-### **MINIJUEGO 1: BASKETBALL (10 Vidas | 7 Tiros)**
+### **MINIJUEGO 1: BASKETBALL (7 Intentos | 4 Aciertos)**
 - **Perspectiva:** Cámara en 1ª persona desde la línea de tiros libres o lateral de media cancha estilo arcade.
-- **Mapeo de los 7 Tiros Acertados (Extraído de `Aciertos.md` / Matriz PM):**
+- **Mapeo de los Aciertos (Extraído de `Aciertos.md` / Matriz PM):**
   1. *Tiro 1:* Gestión de Riesgos (Técnica).
   2. *Tiro 2:* Planificación y Estimación de Cronogramas/Presupuestos (Técnica).
   3. *Tiro 3:* Manejo de Metodologías Ágiles y Predictivas (Técnica).
@@ -74,9 +74,9 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
 
 ---
 
-### **MINIJUEGO 2: FÚTBOL - PENALTIS (10 Vidas | 7 Tiros)**
+### **MINIJUEGO 2: FÚTBOL - PENALTIS (7 Intentos | 4 Aciertos)**
 - **Perspectiva:** Cámara trasera detrás del pateador / cámara lateral de tiro libre que muestra la portería y la trayectoria hacia las esquinas o el centro.
-- **Mapeo de los 7 Tiros Acertados (Extraído de `Aciertos.md` / Matriz PM):**
+- **Mapeo de los Aciertos (Extraído de `Aciertos.md` / Matriz PM):**
   1. *Tiro 1:* Optimización y Gestión del Tiempo (Competencia).
   2. *Tiro 2:* Negociación de Expectativas con Stakeholders (Competencia).
   3. *Tiro 3:* Toma de Decisiones Estratégicas bajo Presión (Competencia).
@@ -87,9 +87,9 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
 
 ---
 
-### **MINIJUEGO 3: TIRO AL BLANCO - ARQUERÍA (10 Vidas | 7 Tiros)**
+### **MINIJUEGO 3: TIRO AL BLANCO - ARQUERÍA (7 Intentos | 4 Aciertos)**
 - **Perspectiva:** Cámara frontal en 1ª persona alineada con la diana/blanco y la flecha en primer plano.
-- **Mapeo de los 7 Tiros Acertados (Extraído de `Aciertos.md` / Matriz PM):**
+- **Mapeo de los Aciertos (Extraído de `Aciertos.md` / Matriz PM):**
   1. *Tiro 1:* Certificación PMP® (Project Management Professional - PMI).
   2. *Tiro 2:* Certificación CSM® / PSM I (Certified Scrum Master).
   3. *Tiro 3:* Certificación CAPM® (Certified Associate in PM).
@@ -102,7 +102,7 @@ El juego utilizará una perspectiva retro optimizada según el deporte para gara
 
 ## 5. SECCIÓN FINAL: PODIO Y REFLEXIÓN ESTRATÉGICA
 
-Al agotar con éxito los 7 tiros de los 3 minijuegos, se accede al Podio Final donde se estructuran los 3 puntos de reflexión requeridos para la charla de Recursos Humanos:
+Al completar con éxito los 4 aciertos de cada uno de los 3 minijuegos, se accede al Podio Final donde se estructuran los 3 puntos de reflexión requeridos para la charla de Recursos Humanos:
 
 ### **1. Características Imprescindibles y Justificación**
 - **Comunicación Asertiva:** Puente indispensable entre desarrolladores, clientes y directivos. Si falla la comunicación, el proyecto fracasa sin importar la tecnología utilizada [cite: 1].
@@ -171,3 +171,33 @@ Al agotar con éxito los 7 tiros de los 3 minijuegos, se accede al Podio Final d
    - Contador de Vidas (`❤️ x 10`).
    - Contador de Progreso (`🏀 / ⚽ / 🎯 Tiro X de 7`).
 3. Diseñar las animaciones de feedback inmediato de tiro (Balón entrando por la canasta / Pelota rompiendo la red / Flecha dando en el centro) frente a tiros fallidos (Balón pegando en el aro / Atajada del arquero / Flecha clavada en la madera).
+
+
+---
+
+## 8. ESTADO DE IMPLEMENTACIÓN Y FUNCIONALIDADES AGREGADAS
+
+> Sección de seguimiento: documenta lo implementado más allá de la especificación inicial (Versión 2.0 → implementación actual).
+
+### 8.1 Implementado (v1 funcional)
+- **Canvas HTML5 800×450 (16:9), vanilla JS ES6, CSS3, Web Audio API, cero dependencias.** Desplegable en GitHub Pages con rutas relativas.
+- **3 minijuegos completos:** Basketball (vista lateral), Fútbol penaltis (portería con arquero) y Tiro al blanco (diana frontal). Cada uno con 7 intentos (meta: 4 aciertos), slider de timing (zona verde/amarilla/roja) y animaciones de acierto/fallo.
+- **HUD persistente:** intentos restantes, "Tiro X de 7" con emoji del minijuego y contador de aciertos.
+- **Control unificado:** ESPACIO / CLICK / TAP.
+- **7 intentos / 4 aciertos:** cada tiro consume un intento; con 4 aciertos se completa el nivel; si se agotan los 7 intentos sin 4 aciertos, game over con reintento del minijuego.
+- **Podio final:** perfil completo del PM ideal con las 3 reflexiones estratégicas (imprescindibles, competencias más mencionadas, contexto que prioriza).
+- **Sonido sintetizado** (Web Audio API) con primer gesto de usuario.
+
+### 8.2 Funcionalidades agregadas durante el desarrollo
+- **Carga dinámica de `aciertos.md` (`js/aciertos.js`):** el documento real del autor es la fuente de contenido. Se parsea por sección `##` + emoji, acierto `### Cesta/Disparo/Diana N` y diálogos `- **Título:**` con descripción en blockquote `> *"..."*`. La categoría de la tarjeta se deriva automáticamente según el minijuego y el orden del diálogo. Los tiros 5–7 (sin entrada en el doc) usan como respaldo los logros de `config.js`.
+- **Tarjetas de logro como diálogos:** tras cada acierto se muestra una tarjeta retro con avatar del minijuego, texto que se **escribe carácter a carácter** y que **solo se cierra con Click/Espacio** (el primer input completa la escritura; el segundo avanza al siguiente diálogo o cierra). Basketball y football muestran 2 diálogos consecutivos por acierto; archery, 1.
+- **Autoajuste de texto/ventana en tarjetas:** tarjeta amplia (560×230–400 px), el título usa 24 px (baja a 19 si envuelve a 2 líneas), la descripción usa 15 px (reduce hasta 11 si excede 5 líneas) y la ventana crece según el contenido, anclada para no salir de pantalla.
+- **Desbloqueo secuencial con progreso persistente:** basketball al inicio; football al completar basketball; archery al completar los dos. Las cards bloqueadas se ven en gris con candado. Progreso en `localStorage` (tecla `R` reinicia). *Nota: durante el testing los 3 minijuegos están temporalmente desbloqueados en `main.js` (`isUnlocked`); revertir al terminar.*
+- **Sistema de sprites (`js/sprites.js`):** sprites pixel-art como SVG embebidos (data-URI) rasterizados y ampliados sin suavizado → acabado retro nítido, con fallback procedural por escena (`spriteOr()`). 8 sprites: jugador baloncesto, tablero/aro/red, balón, arquero, balón de fútbol, diana, flecha y balón de baloncesto.
+- **Cancha de basketball (vista lateral):** jugador grande (×2.6) a la izquierda, aro grande (×2.6) a la derecha, parquet con marcas pintadas (línea de fondo y **un solo círculo central**), grada con público, poste con base y sombras en el suelo.
+- **Pruebas automáticas (`tests/`):** 5 suites ejecutables con `node tests/test_*.js` (boot/input, flujo, render con y sin sprites, parseo de `aciertos.md`, sprites).
+
+### 8.3 Desviaciones de la especificación
+- **Resolución del canvas:** la Dirección de Arte pedía 480×270; se implementó **800×450** (mismo 16:9, mayor detalle) con `fontScale: 1.32`.
+- **Cámara de basketball:** se optó por la vista lateral de media cancha (espec. §4 ofrecía "frontal o lateral"); las cámaras frontal de fútbol y arquería se implementaron como vistas desde la posición del jugador hacia la portería/diana.
+- **Mapeo de aciertos:** el documento `aciertos.md` define 4 aciertos por minijuego (no 7); los tiros 5–7 se cubren con los logros embebidos de `config.js` hasta que el autor amplíe el documento.

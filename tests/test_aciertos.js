@@ -40,10 +40,12 @@ assert(parsed.football[0].dialogs.length === 2, "football disparo 1: 2 dialogos"
 assert(parsed.archery[0].dialogs.length === 1, "archery diana 1: dialogo unico");
 
 const b1 = parsed.basketball[0].dialogs[0];
-assert(b1.type === "HABILIDAD TÉCNICA" && b1.desc.indexOf("Identificación") === 0, "basketball cesta1 dialogo1 contenido");
-assert(parsed.basketball[0].dialogs[1].type === "HABILIDAD BLANDA" && parsed.basketball[0].dialogs[1].desc.length > 0, "basketball cesta1 dialogo2 contenido");
-assert(parsed.football[0].dialogs[1].type === "CERTIFICACIÓN RECOMENDADA" && parsed.football[0].dialogs[1].desc.indexOf("Project Management Professional") === 0, "football disparo1 dialogo2 certificacion");
-assert(parsed.archery[3].dialogs[0].desc.indexOf("Integridad") === 0, "archery diana4 contenido");
+assert(b1.type === "HABILIDAD TÉCNICA" && b1.title === "Gestión de riesgos" && b1.desc.indexOf("Identificación") === 0, "basketball cesta1 dialogo1 contenido");
+assert(parsed.basketball[0].dialogs[1].type === "HABILIDAD BLANDA" && parsed.basketball[0].dialogs[1].title === "Liderazgo situacional e inspiración de equipos" && parsed.basketball[0].dialogs[1].desc.indexOf("Adaptar el estilo") === 0, "basketball cesta1 dialogo2 contenido");
+assert(parsed.basketball[2].dialogs[0].title === "Manejo de metodologías", "basketball cesta3 dialogo1 titulo limpio");
+assert(parsed.football[0].dialogs[0].type === "COMPETENCIA CLAVE" && parsed.football[0].dialogs[0].desc.indexOf("Priorización de tareas") === 0, "football disparo1 dialogo1 competencia");
+assert(parsed.football[0].dialogs[1].type === "CERTIFICACIÓN RECOMENDADA" && parsed.football[0].dialogs[1].title.indexOf("Project Management Professional") === 0 && parsed.football[0].dialogs[1].desc.indexOf("Certificación reconocida") === 0, "football disparo1 dialogo2 certificacion");
+assert(parsed.archery[3].dialogs[0].type === "ATRIBUTO PERSONAL" && parsed.archery[3].dialogs[0].title === "Integridad y responsabilidad" && parsed.archery[3].dialogs[0].desc.indexOf("Actuar con ética") === 0, "archery diana4 contenido");
 
 // carga y datos vivos
 assert(IPM.aciertos.data === null, "data nula antes de cargar");
