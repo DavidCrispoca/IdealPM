@@ -469,9 +469,10 @@ function drawBanner(ctx, str, sub, color) {
   // MENU
   // =====================================================================
   const CARD_X = [70, 300, 530];
-  const CARD_Y = 190;
+  const CARD_Y = 210;
   const CARD_W = 210;
   const CARD_H = 104;
+  const TESTBTN = { x: 14, y: 414, w: 120, h: 28 };
 
   class Menu {
     constructor(game) {
@@ -487,6 +488,10 @@ function drawBanner(ctx, str, sub, color) {
     start(idx) {
       this.game.setScene(new IPM.scenes.Minigame(this.game, idx));
     }
+    testPodium() {
+      IPM.audio.click();
+      this.game.setScene(new Podium(this.game));
+    }
     cardAt(evt) {
       if (!evt) return null;
       for (let i = 0; i < 3; i++) {
@@ -495,7 +500,13 @@ function drawBanner(ctx, str, sub, color) {
       return null;
     }
     handleInput(a, evt) {
-      if (a === "tap") a = this.cardAt(evt);
+      if (a === "tap") {
+        if (evt && evt.x >= TESTBTN.x && evt.x <= TESTBTN.x + TESTBTN.w && evt.y >= TESTBTN.y && evt.y <= TESTBTN.y + TESTBTN.h) {
+          this.testPodium();
+          return;
+        }
+        a = this.cardAt(evt);
+      }
       if (a === "reset") {
         this.game.resetProgress();
         IPM.audio.click();
@@ -537,9 +548,9 @@ function drawBanner(ctx, str, sub, color) {
       R.text(ctx, "IDEALPM", W / 2, 118 + wob, { size: 46, bold: true, align: "center", color: P.red });
       R.text(ctx, "IDEALPM", W / 2 + 4, 122 + wob, { size: 46, bold: true, align: "center", color: P.yellow });
       R.text(ctx, "IDEALPM", W / 2, 120 + wob, { size: 46, bold: true, align: "center", color: P.white });
-      R.text(ctx, "¡Conviértete en el Project Manager Ideal!", W / 2, 154, { size: 11, align: "center", color: P.blue });
-      R.text(ctx, "Desbloquea el siguiente nivel en 7 intentos.", W / 2, 170, { size: 8, align: "center", color: P.cream });
-      R.text(ctx, "Por cada acierto, aprenderás nuevas características", W / 2, 181, { size: 8, align: "center", color: P.cream });
+      R.text(ctx, "¡Conviértete en el Project Manager Ideal!", W / 2, 156, { size: 11, align: "center", color: P.blue });
+      R.text(ctx, "Desbloquea el siguiente nivel en 7 intentos.", W / 2, 172, { size: 8, align: "center", color: P.cream });
+      R.text(ctx, "Por cada acierto, aprenderás nuevas características", W / 2, 186, { size: 8, align: "center", color: P.cream });
 
       const sel = this.unlocked();
       const selIdx = sel.length ? sel[this.opt % sel.length] : 0;
@@ -568,7 +579,7 @@ function drawBanner(ctx, str, sub, color) {
       });
 
       if (this.lockMsg && Math.floor(this.lockT * 3) % 2 === 0) {
-        R.text(ctx, "🔒 COMPLETA EL MINIJUEGO ANTERIOR PARA DESBLOQUEARLO", W / 2, 314, { size: 12, bold: true, align: "center", color: P.red });
+        R.text(ctx, "🔒 COMPLETA EL MINIJUEGO ANTERIOR PARA DESBLOQUEARLO", W / 2, 324, { size: 12, bold: true, align: "center", color: P.red });
       }
 
       const blink = Math.floor(this.time * 2.2) % 2 === 0;
@@ -576,6 +587,10 @@ function drawBanner(ctx, str, sub, color) {
         R.text(ctx, "▶ PRESIONA ESPACIO / TOCA UNA TARJETA PARA JUGAR ◀", W / 2, 424, { size: 13, bold: true, align: "center", color: P.yellow });
       }
       R.text(ctx, "← → SELECCIONAR · ESPACIO JUGAR · R REINICIAR PROGRESO", W / 2, 446, { size: 8, align: "center", color: P.cream });
+
+      R.panel(ctx, TESTBTN.x, TESTBTN.y, TESTBTN.w, TESTBTN.h, { fill: P.panel, light: P.orange });
+      R.rectOutline(ctx, TESTBTN.x, TESTBTN.y, TESTBTN.w, TESTBTN.h, P.orange, 1);
+      R.text(ctx, "TEST PODIO", TESTBTN.x + TESTBTN.w / 2, TESTBTN.y + 18, { size: 10, bold: true, align: "center", color: P.yellow, shadow: false });
     }
   }
 
@@ -810,10 +825,52 @@ function drawBanner(ctx, str, sub, color) {
     constructor(game) {
       this.game = game;
       this.time = 0;
+      this.state = "steps";
+      this.sel = -1;
+    }
+    steps() {
+      return [IPM.PODIUM.essentials, IPM.PODIUM.industry, IPM.PODIUM.context];
+    }
+    pedestals() {
+      const base = 382;
+      return [
+        { x: 265, y: base - 152, w: 270, h: 152 },
+        { x: 52, y: base - 112, w: 200, h: 112 },
+        { x: 548, y: base - 112, w: 200, h: 112 }
+      ];
+    }
+    pedestalAt(px, py) {
+      const geos = this.pedestals();
+      for (let i = 0; i < geos.length; i++) {
+        const g = geos[i];
+        if (px >= g.x && px <= g.x + g.w && py >= g.y && py <= g.y + g.h) return i;
+      }
+      return -1;
+    }
+    splitTitle(title) {
+      const m = /^(\d+)\s*(?:·|\.)\s*(.*)$/.exec(title);
+      return m ? { num: m[1], label: m[2] } : { num: "", label: title };
     }
     handleInput(a, evt) {
       if (a === "tap") a = "fire";
+      if (this.state === "card") {
+        if (a === "fire") {
+          IPM.audio.click();
+          this.state = "steps";
+          this.sel = -1;
+        }
+        return;
+      }
       if (a === "fire") {
+        if (evt && typeof evt.x === "number") {
+          const hit = this.pedestalAt(evt.x, evt.y);
+          if (hit >= 0) {
+            IPM.audio.click();
+            this.sel = hit;
+            this.state = "card";
+            return;
+          }
+        }
         IPM.audio.fanfare();
         this.game.setScene(new Menu(this.game));
       }
@@ -822,33 +879,84 @@ function drawBanner(ctx, str, sub, color) {
     render(ctx) {
       R.rect(ctx, 0, 0, W, H, P.sky1);
       for (let i = 0; i < 5; i++) R.rect(ctx, 20 + i * 160, 30 + (i % 2) * 20, 4, 4, P.white);
+      if (this.state === "card" && this.sel >= 0) {
+        this.drawStepCard(ctx, this.sel);
+        return;
+      }
       R.text(ctx, "🏆", W / 2, 58, { size: 30, align: "center", shadow: false });
-      R.text(ctx, IPM.PODIUM.title, W / 2, 92, { size: 22, bold: true, align: "center", color: P.yellow });
-      R.text(ctx, IPM.PODIUM.intro, W / 2, 114, { size: 10, align: "center", color: P.white });
+      R.text(ctx, IPM.PODIUM.title, W / 2, 92, { size: 22, bold: true, align: "center", color: P.yellow, shadow: false });
+      R.text(ctx, IPM.PODIUM.intro, W / 2, 114, { size: 10, align: "center", color: P.white, shadow: false });
 
       const st = this.game.stats;
       const totalAch = IPM.MINIGAMES.reduce(function (a, m) { return a + m.needed; }, 0);
-      R.text(ctx, "PERFECTOS " + st.perfects + " · BUENOS " + st.goods + " · FALLOS " + st.misses + " · ACIERTOS " + totalAch + "/" + totalAch, W / 2, 136, { size: 10, align: "center", color: P.orange });
+      R.text(ctx, "PERFECTOS " + st.perfects + " · BUENOS " + st.goods + " · FALLOS " + st.misses + " · ACIERTOS " + totalAch + "/" + totalAch, W / 2, 136, { size: 10, align: "center", color: P.orange, shadow: false });
 
-      const cols = [IPM.PODIUM.essentials, IPM.PODIUM.industry, IPM.PODIUM.context];
-      cols.forEach(function (col, i) {
-        const x = 16 + i * 258;
-        const y = 148;
-        R.panel(ctx, x, y, 250, 300, { fill: i === 0 ? "#3a2b4d" : P.panel });
-        R.text(ctx, col.title, x + 125, y + 28, { size: 11, bold: true, align: "center", color: P.yellow });
-        R.line(ctx, x + 12, y + 36, x + 238, y + 36, P.black, 2);
-        col.items.forEach(function (it, j) {
-          const lines = R.wrap(ctx, it, 224, 8);
-          let yy = y + 58 + j * 6;
-          lines.slice(0, 5).forEach(function (ln) {
-            R.text(ctx, ln, x + 12, yy, { size: 8, align: "left", color: P.cream });
-            yy += 15;
-          });
+      this.drawPodium(ctx);
+      R.text(ctx, "▶ TOCA UN PODIO PARA VER SU CONTENIDO · ESPACIO PARA SALIR ◀", W / 2, 444, { size: 12, bold: true, align: "center", color: P.green, shadow: false });
+    }
+    drawPodium(ctx) {
+      const geos = this.pedestals();
+      const steps = this.steps();
+      const themes = [
+        { face: "#e8b93e", top: "#ffd968", edge: "#9a7420", text: "#332200" },
+        { face: "#c2c6cd", top: "#e3e6ea", edge: "#7d8289", text: "#1c1f26" },
+        { face: "#c57f3d", top: "#dd9a55", edge: "#7c4a1c", text: "#fff7ea" }
+      ];
+      R.rect(ctx, 0, 382, W, 68, P.bgDark);
+      R.rect(ctx, 0, 382, W, 4, "#3c4373");
+      geos.forEach(function (g, i) {
+        const t = themes[i];
+        const big = i === 0;
+        const sp = this.splitTitle(steps[i].title);
+        R.rect(ctx, g.x, g.y, g.w, g.h, t.face);
+        R.rect(ctx, g.x + 5, g.y + 2, g.w - 10, 14, t.top);
+        R.rect(ctx, g.x, g.y + 2, 4, g.h - 2, t.edge);
+        R.rect(ctx, g.x + g.w - 4, g.y + 2, 4, g.h - 2, t.edge);
+        R.rectOutline(ctx, g.x, g.y, g.w, g.h, P.black, 3);
+        R.text(ctx, sp.num, g.x + g.w / 2, g.y + (big ? 76 : 58), { size: big ? 44 : 32, bold: true, align: "center", color: t.text, shadow: false });
+        const lsize = big ? 15 : 12;
+        const lines = R.wrap(ctx, sp.label, g.w - 26, lsize);
+        let yy = g.y + (big ? 110 : 84);
+        lines.slice(0, 3).forEach(function (ln) {
+          R.text(ctx, ln, g.x + g.w / 2, yy, { size: lsize, bold: true, align: "center", color: t.text, shadow: false });
+          yy += Math.round(lsize * 1.8);
         });
+      }, this);
+    }
+    drawStepCard(ctx, idx) {
+      const step = this.steps()[idx];
+      const sp = this.splitTitle(step.title);
+      const cw = 560, pad = 18, headerH = 34, footerH = 24, maxCh = 380;
+      const x = (W - cw) / 2;
+      const tSize = 18;
+      const dSize = 12;
+      const tLines = R.wrap(ctx, step.title, cw - 40, tSize);
+      const titleH = tLines.length * Math.round(tSize * 1.6);
+      const dH = Math.max(20, Math.round(dSize * 1.8));
+      const lines = [];
+      step.items.forEach(function (it) {
+        const ws = R.wrap(ctx, it, cw - 96, dSize);
+        ws.forEach(function (ln, j) { lines.push(j === 0 ? "• " + ln : "   " + ln); });
       });
-
-      const blink = Math.floor(this.time * 2.2) % 2 === 0;
-      if (blink) R.text(ctx, "▶ ESPACIO / TOCA PARA VOLVER AL INICIO ◀", W / 2, 444, { size: 12, bold: true, align: "center", color: P.green });
+      const maxLines = Math.max(1, Math.floor((maxCh - headerH - titleH - footerH - pad) / dH));
+      const kept = lines.slice(0, maxLines);
+      const bodyH = titleH + kept.length * dH;
+      const ch = Math.min(maxCh, Math.max(230, headerH + bodyH + footerH + pad));
+      const y = Math.max(12, 225 - ch / 2);
+      R.panel(ctx, x, y, cw, ch, { fill: P.panel });
+      R.rect(ctx, x, y, cw, headerH, P.blueDark);
+      R.text(ctx, "★ PASO " + sp.num + " DE 3", x + cw / 2, y + 23, { size: 14, bold: true, align: "center", color: P.yellow, shadow: false });
+      let yy = y + headerH + 18;
+      tLines.forEach(function (ln) {
+        R.text(ctx, ln, x + cw / 2, yy, { size: tSize, bold: true, align: "center", color: P.white, shadow: false });
+        yy += Math.round(tSize * 1.6);
+      });
+      yy = y + headerH + titleH + 16;
+      kept.forEach(function (ln) {
+        R.text(ctx, ln, x + 40, yy, { size: dSize, align: "left", color: P.cream, shadow: false });
+        yy += dH;
+      });
+      R.text(ctx, "▶ TOCA / ESPACIO PARA CERRAR ◀", x + cw / 2, y + ch - 16, { size: 12, align: "center", color: P.blue, shadow: false });
     }
   }
 

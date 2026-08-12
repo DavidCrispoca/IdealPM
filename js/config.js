@@ -86,7 +86,7 @@ IPM.PODIUM = {
   title: "PERFIL DEL PM IDEAL",
   intro: "Con los 12 aciertos se completa el perfil del Project Manager ideal.",
   essentials: {
-    title: "1 · IMPRESCINDIBLES",
+    title: "1. Imprescindibles",
     items: [
       "Comunicación Asertiva: puente entre desarrolladores, clientes y directivos. Si falla la comunicación, el proyecto fracasa sin importar la tecnología.",
       "Gestión de Riesgos y Planificación: anticipar problemas ahorra presupuesto y tiempo, asegurando entregables de calidad.",
@@ -94,7 +94,7 @@ IPM.PODIUM = {
     ]
   },
   industry: {
-    title: "2 · MÁS MENCIONADAS",
+    title: "2. Competencias mencionadas",
     items: [
       "Liderazgo y Comunicación: el motor diario del PM para guiar y mover al equipo.",
       "Manejo del Tiempo y Organización: vital para garantizar los deadlines.",
@@ -102,7 +102,7 @@ IPM.PODIUM = {
     ]
   },
   context: {
-    title: "3 · EL CONTEXTO PRIORIZA",
+    title: "3. Reflexión",
     items: [
       "Software/Tech: agilidad (Scrum), iteraciones rápidas y comprensión técnica.",
       "Construcción: control de costos, gestión predictiva, contratos y normativas.",
