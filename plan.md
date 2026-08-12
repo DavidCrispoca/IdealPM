@@ -56,11 +56,44 @@ IdealPM/
         Settings→Pages→main/raíz). URL final: `https://<usuario>.github.io/IdealPM/`.
 
 ## Decisiones tomadas
-- Sin `Aciertos.md`: el contenido ya está en la spec y queda embebido en
-  `config.js` (mejora futura: re-introducirlo como `data/` para editarlo sin código).
+- Contenido de tarjetas en `aciertos.md`: el juego lee el documento del autor con
+  `js/aciertos.js` (fetch en el boot). Se divide por minijuego (`##` + emoji) y por
+  acierto (`### Cesta/Disparo/Diana`), con dos diálogos por acierto en basketball
+  y football y uno en archery (contenido en blockquote `>`). Los aciertos 5-7,
+  sin entrada en el doc, usan como respaldo los logros de `config.js`.
 - Rutas relativas en todo (fetch/links) para que Pages sirva bajo `/IdealPM/`.
 - Audio requiere primer gesto (clic/tecla) por política de autoplay.
 - Retry por tiro: se repite el tiro actual hasta acertar o agotar vidas.
+- **Desbloqueo secuencial:** solo se juega basketball al inicio; football se
+  desbloquea al completar basketball, y archery al completar los dos anteriores.
+  Las cards bloqueadas se muestran en gris con candado. Progreso guardado en
+  `localStorage` (tecla `R` lo reinicia).
+- **Tipografía más legible:** escala global de fuente (`fontScale: 1.32` en
+  `config.js`) y más espacio vertical en HUD, tarjetas, menú y podio.
+- **Cancha de basketball estilo retro (vista lateral):** cámara de costado como
+  los clásicos de baloncesto (tipo NES/Double Dribble): jugador grande a la
+  izquierda (sprite ×2.6) lanzando a un aro grande a la derecha (×2.6), cancha
+  plana de parquet con marcas pintadas (línea de fondo, círculo central y de
+  tiro libre), grada con público y poste con base hasta el suelo.
+- **Sistema de sprites (`js/sprites.js`):** sprites pixel-art definidos como SVG
+  embebidos (data-URI), rasterizados a baja resolución y ampliados con
+  `imageSmoothingEnabled = false` → acabado retro nítido, sin red. Se precargan
+  en el boot; si hay URLs en `IPM.CONFIG.spriteURLs` se intentan primero y se
+  cae al SVG embebido si fallan. Cada escena dibuja con `spriteOr()` (sprite si
+  está listo, fallback procedural si no). Basketball usa sprites de jugador,
+  tablero/aro/red y balón; fútbol usa arquero y balón; arquería usa diana y
+  flecha. Sombras suaves en el suelo para balones, jugador y arquero.
+- **Tarjeta de logro como diálogo:** tras encestar, la animación de vuelo va en
+  timeline fijo de 1 s (el balón entra a ~0.72 s) y luego se entra al estado
+  `card`: diálogo con avatar del minijuego, texto que **se escribe caracter a
+  caracter**, y que **solo desaparece con Click o Espacio** (el primer input
+  completa la escritura, el segundo cierra la tarjeta). El contenido sale de
+  `aciertos.md` y la tarjeta se asigna al disparar (`shoot()`).
+- **Pruebas automáticas en `tests/`:** flujo completo (desbloqueos, fallos,
+  gameover, tarjeta asignada en el disparo y cerrada por input), render de todas
+  las escenas/estados con y sin sprites (incluye el estado `card`), boot+input,
+  rasterización de los 8 sprites y parseo de `aciertos.md`. Ejecutar con
+  `node tests/test_*.js`.
 
 ## Fuera de alcance (futuras iteraciones)
 - Spritesheets y arte manual; efectos de partículas avanzados.

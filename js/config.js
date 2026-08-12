@@ -9,7 +9,7 @@ IPM.CONFIG = {
     shotsToPass: 7
   },
   cameraModes: {
-    basketball: "frontal_or_side_half_court",
+    basketball: "side_view_half_court",
     football: "behind_kicker_or_side_penalty",
     archery: "first_person_target"
   },
@@ -18,9 +18,11 @@ IPM.CONFIG = {
     green: [0.42, 0.58],
     yellow: [0.27, 0.42, 0.58, 0.73]
   },
+  fontScale: 1.32,
+  spriteURLs: {},
   timings: {
     intro: 1.0,
-    result: 1.7,
+    result: 2.4,
     fail: 1.3,
     clear: 2.0
   }

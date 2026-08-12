@@ -29,17 +29,19 @@ IPM.render = (function () {
 
   function text(ctx, str, x, y, opts) {
     opts = opts || {};
-    const size = opts.size || 10;
+    const scale = IPM.CONFIG.fontScale || 1;
+    const size = Math.round((opts.size || 10) * scale);
     const color = opts.color || PALETTE.white;
     const align = opts.align || "left";
     const shadow = opts.shadow !== false;
+    const soff = Math.max(2, Math.round(2 * scale));
     ctx.save();
     ctx.font = (opts.bold ? "bold " : "") + size + "px '" + (opts.font || "Courier New") + "', monospace";
     ctx.textAlign = align;
     ctx.textBaseline = opts.baseline || "alphabetic";
     if (shadow) {
       ctx.fillStyle = PALETTE.black;
-      ctx.fillText(str, round(x) + 2, round(y) + 2);
+      ctx.fillText(str, round(x) + soff, round(y) + soff);
     }
     ctx.fillStyle = color;
     ctx.fillText(str, round(x), round(y));
@@ -91,7 +93,9 @@ IPM.render = (function () {
     const words = str.split(" ");
     const lines = [];
     let cur = "";
-    ctx.font = size + "px 'Courier New', monospace";
+    const scale = IPM.CONFIG.fontScale || 1;
+    const fsize = Math.round((size || 10) * scale);
+    ctx.font = fsize + "px 'Courier New', monospace";
     for (const w of words) {
       const test = cur ? cur + " " + w : w;
       if (ctx.measureText(test).width > maxW && cur) {
@@ -103,6 +107,37 @@ IPM.render = (function () {
     }
     if (cur) lines.push(cur);
     return lines;
+  }
+
+  function circle(ctx, cx, cy, r, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(round(cx), round(cy), r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function circleOutline(ctx, cx, cy, r, color, width) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width || 2;
+    ctx.beginPath();
+    ctx.arc(round(cx), round(cy), r, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  function ellipse(ctx, cx, cy, rx, ry, color, width) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width || 2;
+    ctx.beginPath();
+    ctx.ellipse(round(cx), round(cy), rx, ry, 0, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  function ellipseArc(ctx, cx, cy, rx, ry, a0, a1, color, width) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width || 2;
+    ctx.beginPath();
+    ctx.ellipse(round(cx), round(cy), rx, ry, 0, a0, a1);
+    ctx.stroke();
   }
 
   function quad(t, a, b, c) {
@@ -120,6 +155,10 @@ IPM.render = (function () {
     line: line,
     pixelate: pixelate,
     wrap: wrap,
-    quad: quad
+    quad: quad,
+    circle: circle,
+    circleOutline: circleOutline,
+    ellipse: ellipse,
+    ellipseArc: ellipseArc
   };
 })();
